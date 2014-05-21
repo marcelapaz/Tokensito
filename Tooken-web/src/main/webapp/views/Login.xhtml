@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Login</title>
+        <link href="../resources/css/login.css" type="text/css" rel="stylesheet"/>
+        <style type="text/css">
+                body {
+                        background: url(../resources/imagenes/fondo.jpg) no-repeat center fixed;
+                        -webkit-background-size: cover;
+                        -moz-background-size: cover;
+                        -o-background-size: cover;
+                        background-size: cover;
+                        margin: 0;
+                        padding: auto;
+                }
+        </style>
+    </h:head>
+    <h:body>
+        <div class="conteiner">
+            
+            <h:form id="formLogin">                
+                <p:panel id="panel" header="Ingresar Usuario y Contraseña">
+                    <p:growl id="messages" showDetail="true"/>
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <h:outputLabel for="username" value="Usuario:" />
+                        <p:inputText value="#{login.user}"
+                                     id="username" required="true" label="username" />
+
+                        <h:outputLabel for="password" value="Contraseña" />
+                        <p:password value="#{login.contrasena}"
+                                       id="password" required="true" label="password" />
+                        <f:facet name="footer">
+                            <p:commandButton id="loginButton" value="Login" icon="../images/login.png" update="panel"
+                                             
+                                             oncomplete="handleLoginRequest(xhr, status, args)" action="#{login.validacion()}"/>
+                        </f:facet>
+                    </h:panelGrid>
+                </p:panel>
+            </h:form>
+        </div>
+        <script type="text/javascript">
+    function handleLoginRequest(xhr, status, args) {
+        if(args.validationFailed || !args.loggedIn) {
+            jQuery('#formLogin').effect("shake", { times:5 }, 100);
+        } 
+        else {
+            location.href=args.ruta;
+        }
+    }
+</script>
+    </h:body>
+</html>
+

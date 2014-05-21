@@ -1,0 +1,120 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="./css/default.css"/>
+        <h:outputStylesheet name="./css/cssLayout.css"/>
+        <title></title>
+    </h:head>
+
+    <h:body>
+
+        <div id="top">
+            <ui:insert name="top">Top</ui:insert>
+        </div>
+        <div>
+            <div id="left">
+                <ui:insert name="left">Left</ui:insert>
+            </div>
+            <div>
+                <div id="right">
+                    <ui:insert name="right">Right</ui:insert>
+                </div>
+                <div id="content" class="right_content">
+                    <ui:insert name="content"></ui:insert>
+
+                    <h:form>
+                        <p:panel id="cosa" style="border: #ffffff">
+                            <h3 style="font-weight: bold" align="center">RECETA CHEQUE PARA ESTUPEFACIENTES Y PRODUCTOS PSICOTRÓPICOS</h3>
+                            <h4 align="center">"Receta válida para uso interno"</h4>
+
+
+
+
+                            <p:panel>
+                                <h:panelGrid columns="1" cellpadding="5" >
+                                    <h:outputLabel value="Complejo Asistencial Barros Luco"/>
+                                    <h:outputLabel value="Municipalidad San Miguel"/>
+                                    <h:outputLabel value="Servicio de Salud"/>
+                                </h:panelGrid>
+                            </p:panel>    
+
+
+                            <p:panel>
+                                <p:commandButton value="Buscar" action="#{recetaInternaMB.BotonAct2()}" update="actualizar" />
+                                <h:panelGrid id="actualizar" columns="6" cellpadding="5">
+
+                                    <h:outputLabel  value="Doctor: "/>
+                                    <p:inputText size="26"  value="#{recetaexternaMb.nombreDoc}"/>
+
+                                    <h:outputLabel  value="R.U.N Doctor: "/>
+                                    <p:inputText size="26" value="#{recetaexternaMb.runDoc}"/>
+
+                                    <h:outputLabel for="outFecha" value="Fecha: "/>
+                                    <p:inputText size="26" id="outFecha" value="#{recetaInternaMB.fecha}"/>
+
+                                    <h:outputLabel for="outNombre" value="Paciente: "/>
+                                    <p:inputText size="26" id="outNombre" value="#{recetaInternaMB.nombre}"/>
+
+                                    <h:outputLabel  for ="acSimple" value="R.U.N Paciente: "/>
+                                    <p:autoComplete id="acSimple" value="#{recetaInternaMB.txt}"
+                                                    completeMethod="#{recetaInternaMB.complete}" size="26" >
+
+                                    </p:autoComplete>
+
+                                    <h:outputLabel  for="outEdad" value="Edad: "/>
+                                    <p:inputText id="outEdad" size="26"  value="#{recetaInternaMB.edad}"/>
+
+                                    <h:outputLabel for="outFichaa" value="N° ficha: "/>
+                                    <p:inputText size="26" id="outFicha" value="#{recetaInternaMB.ficha}"/>
+
+
+                                </h:panelGrid>
+                            </p:panel>
+
+
+                            <p:panel style="border: #ffffff">
+                                <h:panelGrid cellpadding="5" >
+                                    <h3>Rp.</h3>
+                                    <p:inputTextarea autoResize="true" value="Diagnóstico: " rows="20" cols="100"/>
+                                    <br> </br>
+                                    <h4 align="right">________________________</h4>
+                                    <h4 align="right">Firma/Timbre Médico</h4>
+                                    <br> </br>
+                                    <br> </br>
+                                    <h4 align="left">Talón para adjuntar a la ficha clínica</h4>
+
+
+
+                                </h:panelGrid>
+
+
+                            </p:panel>
+
+
+
+                        </p:panel>
+
+                        <div id="bottom">
+                            <ui:insert name="bottom"></ui:insert>
+                            <div align="center">
+                                <h:commandButton value="Imprimir" type="button" >
+                                    <p:printer target="cosa" />
+                                </h:commandButton>
+                            </div>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+
+
+    </h:body>
+
+</html>

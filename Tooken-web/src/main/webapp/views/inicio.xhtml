@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="./css/default.css"/>
+        <h:outputStylesheet name="./css/cssLayout.css"/>
+        <title>Hospital Barros Luco</title>
+    </h:head>
+
+    <h:body>
+
+        <div id="top">
+            <ui:insert name="top">COMPLEJO ASISTENCIAL BARROS LUCO</ui:insert>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <h:outputStylesheet name="./css/default.css"/>
+            <h:outputStylesheet name="./css/cssLayout.css"/>
+            <title></title>
+            <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
+            <link type="text/css" rel="stylesheet" href="#{request.contextPath}/themes/aristo/skin.css" />
+            <link type="text/css" rel="stylesheet" href="#{request.contextPath}/syntaxhighlighter/styles/syntaxhighlighter.css"></link>
+            <style type="text/css">
+                body {
+                    background: url(../resources/imagenes/fondo-img.jpg) center fixed no-repeat;
+                    margin: 0;
+                    padding: 0;
+                    font-family: geneva, arial, helvetica, sans-serif;
+                    font-size:80%;
+                }
+
+                .appleIcon {
+                    background: url(../resources/imagenes/apple-icon-16x16.png) no-repeat;
+                    width:16px;
+                    height:16px;
+                }
+
+                .ui-dialog .ui-terminal {
+                    border:0;
+                }
+
+                .ui-dialog.terminalDialog .ui-dialog-content {
+                    padding:0;
+                }
+            </style>
+        </div>
+
+        <div id="content" class="center_content">
+            <ui:insert name="content">Content</ui:insert>
+            <h:form>
+
+                <h:outputText value="#{macosxBean.text}" />
+                <p:growl showDetail="true" sticky="true"/>
+                <p:menubar>
+                    <p:submenu icon="appleIcon" label=" " style="">
+                        <p:menuitem value="boton1" url="/resources/hospital-img.png" icon="../resources/imagenes/apple-icon-16x16.png"></p:menuitem>
+                    </p:submenu>
+
+                    <p:submenu label="boton2">
+                        <p:menuitem value="boton3" url="#"></p:menuitem>
+                    </p:submenu>
+
+                    <p:submenu label="boton3">
+                        <p:menuitem value="boton4" url="#"></p:menuitem>
+
+                    </p:submenu>
+
+                    <p:submenu label="boton4">
+                        <p:menuitem value="boton5" url="#"></p:menuitem>
+                    </p:submenu>
+                </p:menubar>
+            </h:form>
+        </div>
+
+        <div id="content" class="right_content">
+            
+            <h:form>
+                <p:dock>
+                    <p:menuitem icon="/resources/imagenes/receta-interna-img.png" value="Receta interna" url="RecetaInterna.xhtml"/>
+                    <p:menuitem icon="/resources/imagenes/receta-externa-img.png" value="Receta externa" url="RecetaExterna.xhtml"/>
+                    <p:menuitem icon="/resources/imagenes/citacion.png" value="Citación" url="Citacion.xhtml"/>
+                </p:dock>
+            </h:form>
+
+        </div>
+
+
+    </h:body>
+
+</html>
