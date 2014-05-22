@@ -3,117 +3,209 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
 
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <h:outputStylesheet name="./css/default.css"/>
         <h:outputStylesheet name="./css/cssLayout.css"/>
-        <title></title>
+        <h:outputStylesheet name="./css/print.css"/>
+
+
     </h:head>
 
     <h:body>
 
         <div id="top">
-            <ui:insert name="top">Top</ui:insert>
+            <ui:insert name="top"></ui:insert>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <h:outputStylesheet name="./css/default.css"/>
+            <h:outputStylesheet name="./css/cssLayout.css"/>
+            <title>Hosp. Barros Luco</title>
+            <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
+            <link type="text/css" rel="stylesheet" href="#{request.contextPath}/themes/aristo/skin.css" />
+            <link type="text/css" rel="stylesheet" href="#{request.contextPath}/syntaxhighlighter/styles/syntaxhighlighter.css"></link>
+            <style type="text/css">
+
+                body {
+                    background: url(../resources/imagenes/mac-img.jpg) center fixed no-repeat;
+                    margin: 0;
+                    padding: 0;
+                    font-family: geneva, arial, helvetica, sans-serif;
+                    font-size:80%;
+                }
+
+                .appleIcon {
+                    background: url(../resources/imagenes/apple-icon-16x16.png) no-repeat;
+                    width:16px;
+                    height:16px;
+                }
+
+                .ui-dialog .ui-terminal {
+                    border:0;
+                }
+
+                .ui-dialog.terminalDialog .ui-dialog-content {
+                    padding:0;
+                }
+
+            </style>
+            <h:form>  
+
+                <p:menubar>
+
+                    <p:menuitem value="Inicio" icon="ui-icon-home" url="../views/inicio.xhtml" />
+
+                    <p:submenu label="Documentos" icon="ui-icon-document">
+                        <p:menuitem value="Receta Externa" url="../views/RecetaExterna.xhtml" icon="" />
+                        <p:menuitem value="Receta Interna" url="#" icon="" />
+                        <p:menuitem value="Citación" url="#" icon="" />
+                    </p:submenu>
+                    <f:facet name="options">
+                        <p:outputLabel value="Bienvenido " style="margin-right:10px"/>
+                        <p:outputLabel value="" style="margin-right:10px"/>
+                        <p:outputLabel value="#{login.contrasena} #{login.apellido}" style="margin-right:10px"/>
+                        <p:commandButton type="button" value="Cerrar Sesión" icon="ui-icon-extlink" />
+                    </f:facet>
+                </p:menubar>
+            </h:form>
         </div>
         <div>
-            <div id="left">
-                <ui:insert name="left">Left</ui:insert>
-            </div>
+
             <div>
-                <div id="right">
-                    <ui:insert name="right">Right</ui:insert>
-                </div>
+
                 <div id="content" class="right_content">
                     <ui:insert name="content"></ui:insert>
 
                     <h:form>
-                        <p:panel id="cosa" style="border: #ffffff">
-                            <h3 style="font-weight: bold" align="center">RECETA CHEQUE PARA ESTUPEFACIENTES Y PRODUCTOS PSICOTRÓPICOS</h3>
-                            <h4 align="center">"Receta válida para uso interno"</h4>
 
-
-
-
-                            <p:panel>
+                        <p:panel id="panelGeneral" style="border: #ffffff">
+                            <p:growl id="messages" showDetail="true"/>
+                            <p:panel id="datoshospital">
+                                <h3 style="font-weight: bold" align="center">RECETA CHEQUE PARA ESTUPEFACIENTES Y PRODUCTOS PSICOTRÓPICOS</h3>
                                 <h:panelGrid columns="1" cellpadding="5" >
                                     <h:outputLabel value="Complejo Asistencial Barros Luco"/>
                                     <h:outputLabel value="Municipalidad San Miguel"/>
                                     <h:outputLabel value="Servicio de Salud"/>
                                 </h:panelGrid>
-                            </p:panel>    
+
+                            </p:panel>
 
 
-                            <p:panel>
-                                <p:commandButton value="Buscar" action="#{recetaInternaMB.BotonAct2()}" update="actualizar" />
-                                <h:panelGrid id="actualizar" columns="6" cellpadding="5">
+                            <br/>
 
-                                    <h:outputLabel  value="Doctor: "/>
-                                    <p:inputText size="26"  value="#{recetaexternaMb.nombreDoc}"/>
+                            <div  align="center">
 
-                                    <h:outputLabel  value="R.U.N Doctor: "/>
-                                    <p:inputText size="26" value="#{recetaexternaMb.runDoc}"/>
 
-                                    <h:outputLabel for="outFecha" value="Fecha: "/>
-                                    <p:inputText size="26" id="outFecha" value="#{recetaInternaMB.fecha}"/>
-
-                                    <h:outputLabel for="outNombre" value="Paciente: "/>
-                                    <p:inputText size="26" id="outNombre" value="#{recetaInternaMB.nombre}"/>
-
-                                    <h:outputLabel  for ="acSimple" value="R.U.N Paciente: "/>
-                                    <p:autoComplete id="acSimple" value="#{recetaInternaMB.txt}"
-                                                    completeMethod="#{recetaInternaMB.complete}" size="26" >
+                                <p:panelGrid columns="3" styleClass="noPrintBlock" id="buscador">
+                                    <f:facet name="header">
+                                        Búsqueda               
+                                    </f:facet>
+                                    <h:outputLabel value="R.U.N paciente:"/>
+                                    <p:autoComplete  id="acSimple" value="#{recetaexternaMb.busca}"
+                                                     completeMethod="#{recetaexternaMb.complete}" size="35" placeholder="Ingrese RUN...">
 
                                     </p:autoComplete>
-
-                                    <h:outputLabel  for="outEdad" value="Edad: "/>
-                                    <p:inputText id="outEdad" size="26"  value="#{recetaInternaMB.edad}"/>
-
-                                    <h:outputLabel for="outFichaa" value="N° ficha: "/>
-                                    <p:inputText size="26" id="outFicha" value="#{recetaInternaMB.ficha}"/>
+                                    <p:commandButton action="#{recetaexternaMb.botonAct()}" update="panelGeneral" value="Seleccionar" icon="ui-icon-triangle-1-s" />
+                                    
+                                </p:panelGrid>
 
 
-                                </h:panelGrid>
+
+
+
+
+                            </div>
+                            <br/>
+                            <div align="center">
+                                <p:panelGrid columns="6" id="datosTodos">
+
+                                    <p:panelGrid columns="2">
+
+                                        <f:facet name="header">Datos Ficha</f:facet>
+
+                                        <h:outputLabel  value="N° ficha: "/>
+                                        <p:outputLabel id="outFicha" value="#{recetaexternaMb.ficha}"/>
+                                        <h:outputLabel  value="Fecha: "/>
+                                        <p:outputLabel id="outFecha" value="#{recetaexternaMb.fecha}"/>
+                                    </p:panelGrid>
+
+                                    <p:panelGrid columns="4">
+
+                                        <f:facet name="header">Datos Paciente</f:facet>
+
+                                        <h:outputLabel  value="R.U.N paciente: "/>
+                                        <p:outputLabel  id="outRun" value="#{recetaexternaMb.txt}"/>
+
+                                        <h:outputLabel  for="outEdad" value="Edad: "/>
+                                        <p:outputLabel id="outEdad" value="#{recetaexternaMb.edad}"/>
+
+                                        <h:outputLabel  value="Nombre paciente: "/>
+                                        <p:outputLabel id="outNombre" value="#{recetaexternaMb.nombre}"/>
+
+                                    </p:panelGrid>
+                                    <p:panelGrid columns="2">
+                                        <f:facet name="header">Datos Doctor</f:facet>
+                                        <h:outputLabel value="R.U.N doctor: "/>
+                                        <p:outputLabel id="runDoc" value="#{login.user}"/>
+                                        <h:outputLabel  value="Nombre doctor: "/>
+                                        <p:outputLabel id="nombreDoc" value="#{login.contrasena} #{login.apellido}"/>
+                                    </p:panelGrid>
+                                </p:panelGrid>
+                            </div>
+
+                            <br/>
+
+
+                            <p:panel id="soloImpresion" header="Rp" visible="false" >
+                                <p:inputText value="">
+                                   
+                                </p:inputText>
                             </p:panel>
 
+                           
+                                <br/>
+                                <div align="center">
+                                    <f:facet name="header">Rp.</f:facet>
+                                    <p:inputTextarea id="editor" value="#{recetaexternaMb.text}" >
+                                        <p:ajax event="blur" update="editor" listener="#{recetaexternaMb.truco()}" />
+                                    </p:inputTextarea>
+                                </div>
 
-                            <p:panel style="border: #ffffff">
-                                <h:panelGrid cellpadding="5" >
-                                    <h3>Rp.</h3>
-                                    <p:inputTextarea autoResize="true" value="Diagnóstico: " rows="20" cols="100"/>
-                                    <br> </br>
-                                    <h4 align="right">________________________</h4>
-                                    <h4 align="right">Firma/Timbre Médico</h4>
-                                    <br> </br>
-                                    <br> </br>
-                                    <h4 align="left">Talón para adjuntar a la ficha clínica</h4>
-
-
-
-                                </h:panelGrid>
+                                <p:dialog header="Content" widgetVar="dlg" showEffect="fade" hideEffect="fade" modal="true">
+                                    <h:outputText id="display" value="#{recetaexternaMb.text}" escape="false" />
+                                </p:dialog>
 
 
-                            </p:panel>
+
+                                <br> </br>
+                                <h4 align="right">________________________</h4>
+                                <h4 align="right">Firma/Timbre Médico</h4>
+                                <br> </br>
+                                <br> </br>
+                                <h4 align="left">Talón para adjuntar a la ficha clínica</h4>
+                            
+
+
 
 
 
                         </p:panel>
-
                         <div id="bottom">
                             <ui:insert name="bottom"></ui:insert>
                             <div align="center">
-                                <h:commandButton value="Imprimir" type="button" >
-                                    <p:printer target="cosa" />
-                                </h:commandButton>
+                                <p:commandButton value="Imprimir" type="button" update="display" action="#{recetaexternaMb.truco(text)}">
+                                    <p:printer target="panelGeneral"   />
+                                </p:commandButton>
                             </div>
                         </div>
-                    </h:form>
+
+
+                    </h:form> 
                 </div>
             </div>
         </div>
-
 
     </h:body>
 

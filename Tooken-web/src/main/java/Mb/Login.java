@@ -27,6 +27,7 @@ public class Login {
 
     String user;
     String contrasena;
+    String apellido;
     
     public Login() {
     }
@@ -46,6 +47,16 @@ public class Login {
     public void setContrasena(String contrasena) {
         this.contrasena = contrasena;
     }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+    
+    
     
     public void validacion() throws IOException{
         String usuario=getUser();
@@ -53,8 +64,9 @@ public class Login {
         FacesContext context = FacesContext.getCurrentInstance();
         
         Professionals prof=professionalsFacade.find(usuario);
+        
         if(prof.getFirstName().equals(pass)){
-            
+            this.apellido = prof.getLastName();
             FacesContext.getCurrentInstance().getExternalContext().redirect("inicio.xhtml");
             context.addMessage(null, new FacesMessage("Welcome", getUser() ));
             

@@ -35,6 +35,10 @@ import session.PrevisionFacadeLocal;
 @ManagedBean
 @RequestScoped
 public class RecetaIntMb {
+    
+    
+    
+    
     @EJB
     private FormaFarmaceuticaFacadeLocal formaFarmaceuticaFacade;
     @EJB
@@ -50,7 +54,6 @@ public class RecetaIntMb {
     private ClinicalrecordsFacadeLocal clinicalrecordsFacade;
     @EJB
     private PatientsFacadeLocal patientsFacade;
-    
     
     String txt;
     String edad;
@@ -158,8 +161,7 @@ public class RecetaIntMb {
     
     public void mostrarNombre(){
         String rut = getBusca();
-        
-        
+
         Patients persona = patientsFacade.find(rut);        
         String datoPersona =persona.getFirstName();
         String datoPersona2 =persona.getLastName();
@@ -299,7 +301,7 @@ public class RecetaIntMb {
             context.addMessage(null, new FacesMessage("Successful", "RUN invalido" ));
         }
         else{
-        
+           
             mostrarDomicilio();
 
             mostrarEdad();

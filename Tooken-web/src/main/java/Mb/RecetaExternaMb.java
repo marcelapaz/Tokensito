@@ -6,28 +6,104 @@
 
 package Mb;
 
+import entity.Clinicalrecords;
+import entity.Patients;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
+import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
+import session.ClinicalrecordsFacadeLocal;
+import session.FarmacoFacadeLocal;
+import session.FfFarmacoFacadeLocal;
+import session.FormaFarmaceuticaFacadeLocal;
+import session.PatientsFacadeLocal;
+import session.PrevisionFacadeLocal;
 
 /**
  *
  * @author camilo
  */
+
 @ManagedBean(name = "recetaexternaMb")
 @RequestScoped
 public class RecetaExternaMb {
+    
+    @EJB
+    private FormaFarmaceuticaFacadeLocal formaFarmaceuticaFacade;
+    @EJB
+    private FfFarmacoFacadeLocal ffFarmacoFacade;
+    @EJB
+    private FarmacoFacadeLocal farmacoFacade;
+
+    @EJB
+    private PrevisionFacadeLocal previsionFacade;
+    
+    
+    @EJB
+    private ClinicalrecordsFacadeLocal clinicalrecordsFacade;
+    @EJB
+    private PatientsFacadeLocal patientsFacade;
+    
 
     int ano;
     int mes;
     int dia;
     String nombreDoc;
+    String apellidoDoc;
     String runDoc;
-    String nombrePac;
+    String nombre;
     String runPac;
     String edad;
     String ficha;
+    String text;
+    String busca;
+    String fecha;
+    String txt;
+
+    public String getTxt() {
+        return txt;
+    }
+
+    public void setTxt(String txt) {
+        this.txt = txt;
+    }
+    
+    
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    
+    
+    public String getBusca() {
+        return busca;
+    }
+
+    public void setBusca(String busca) {
+        this.busca = busca;
+    }
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
+    }
+    
+
+    
+    
     
     
     public RecetaExternaMb() {
@@ -42,6 +118,7 @@ public class RecetaExternaMb {
     public void setAno(int ano) {
         this.ano = ano;
     }
+    
 
     public int getMes(){ 
         Calendar fecha=new GregorianCalendar();
@@ -64,7 +141,7 @@ public class RecetaExternaMb {
     }
 
     public String getNombreDoc() {
-        nombreDoc="MarcePaz";
+        
         return nombreDoc;
     }
 
@@ -73,7 +150,7 @@ public class RecetaExternaMb {
     }
 
     public String getRunDoc() {
-        runDoc="17488881-7";
+        
         return runDoc;
     }
 
@@ -81,17 +158,10 @@ public class RecetaExternaMb {
         this.runDoc = runDoc;
     }
 
-    public String getNombrePac() {
-        nombrePac="Juan Perez";
-        return nombrePac;
-    }
-
-    public void setNombrePac(String nombrePac) {
-        this.nombrePac = nombrePac;
-    }
+ 
 
     public String getRunPac() {
-        runPac="18339446-3";
+        
         return runPac;
     }
 
@@ -100,7 +170,7 @@ public class RecetaExternaMb {
     }
 
     public String getEdad() {
-        edad="20";
+      
         return edad;
     }
 
@@ -109,12 +179,131 @@ public class RecetaExternaMb {
     }
 
     public String getFicha() {
-        ficha="13";
+       
         return ficha;
     }
 
     public void setFicha(String ficha) {
         this.ficha = ficha;
     }
+
+    public String getApellidoDoc() {
+        return apellidoDoc;
+    }
+
+    public void setApellidoDoc(String apellidoDoc) {
+        this.apellidoDoc = apellidoDoc;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+    
+    public void truco(){
+        System.out.println(text);
+        
+      
+    }
+    
+    public void mostrarEdad(){
+        String rut = getBusca();
+        
+        
+        Patients persona = patientsFacade.find(rut);
+        System.out.println("direccion: "+persona.getDateOfBirth().toString());
+        String datoPersona =persona.getDateOfBirth().toString();
+        this.edad=datoPersona;
+    }
+    
+    public void mostrarNombre(){
+        String rut = getBusca();
+
+        Patients persona = patientsFacade.find(rut);        
+        String datoPersona =persona.getFirstName();
+        String datoPersona2 =persona.getLastName();
+        String datoPersona3 =persona.getLastName2();
+        this.nombre=datoPersona+" "+datoPersona2+" "+datoPersona3;
+    }
+    
+    public void mostrarFecha(){
+        
+        Calendar fecha2=new GregorianCalendar();
+        
+        
+        this.fecha=fecha2.get(Calendar.DAY_OF_MONTH)+"/"+fecha2.get(Calendar.MONTH)+"/"+fecha2.get(Calendar.YEAR);
+    }
+    
+    public void mostrarFicha(){
+        String rut = getBusca();
+        List<Patients> lista = patientsFacade.findAll(); 
+        Patients pasiente=new Patients();
+        System.out.println("shiiiiiit");
+        for (int i = 0; i < lista.size(); i++) {
+            if(rut.equals(lista.get(i).getRut()))
+                pasiente = lista.get(i);
+        }
+        List<Clinicalrecords> listaClinical= clinicalrecordsFacade.findRut(pasiente);
+        System.out.println("hoooolaaaaa");
+        System.out.println("ficha: "+listaClinical.get(0).getCrecid().toString());
+        this.ficha=listaClinical.get(0).getCrecid().toString();
+        
+        
+      
+    }
+    
+    public void botonAct(){
+        
+        FacesContext context = FacesContext.getCurrentInstance();
+         System.out.println("Principio");
+        if(busca=="" || busca==null){
+            System.out.println("Entre al if");
+            context.addMessage(null, new FacesMessage("Successful", "RUN invalido" ));
+        }
+        else{
+            System.out.println("estoy en el else");
+           
+        
+
+            mostrarEdad();
+
+            mostrarFecha();
+
+            mostrarNombre();
+
+            mostrarFicha();
+
+          
+
+
+
+            context.addMessage(null, new FacesMessage("Successful", "RUN encontrado" ));
+        }
+    }
+    
+    public List<String> complete(String query) {
+        List<String> results = new ArrayList<String>();
+        List<Patients> lista = patientsFacade.findAll();
+        
+        for (int i = 0; i < lista.size(); i++) {
+           String rut=lista.get(i).getRut();
+           
+         if(rut.startsWith(query)){
+                System.out.println(rut);
+               results.add(rut);
+          }
+            
+            
+        }
+         
+        return results;
+    }
+    
+    
+  
+    
     
 }
