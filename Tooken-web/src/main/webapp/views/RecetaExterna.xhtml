@@ -29,7 +29,7 @@
             <style type="text/css">
 
                 body {
-                    background: url(../resources/imagenes/mac-img.jpg) center fixed no-repeat;
+                    background: url(../resources/imagenes/fondo-img.jpg) center fixed no-repeat;
                     margin: 0;
                     padding: 0;
                     font-family: geneva, arial, helvetica, sans-serif;
@@ -96,26 +96,18 @@
                             <br/>
 
                             <div  align="center">
-
-
+                                
                                 <p:panelGrid columns="3" styleClass="noPrintBlock" id="buscador">
                                     <f:facet name="header">
                                         Búsqueda               
                                     </f:facet>
                                     <h:outputLabel value="R.U.N paciente:"/>
-                                    <p:autoComplete  id="acSimple" value="#{recetaexternaMb.busca}"
-                                                     completeMethod="#{recetaexternaMb.complete}" size="35" placeholder="Ingrese RUN...">
+                                    <p:autoComplete id="acSimple" value="#{recetaexternaMb.busca}" completeMethod="#{recetaexternaMb.complete}" size="35" placeholder="Ingrese RUN...">
 
                                     </p:autoComplete>
                                     <p:commandButton action="#{recetaexternaMb.botonAct()}" update="panelGeneral" value="Seleccionar" icon="ui-icon-triangle-1-s" />
-                                    
+
                                 </p:panelGrid>
-
-
-
-
-
-
                             </div>
                             <br/>
                             <div align="center">
@@ -131,18 +123,18 @@
                                         <p:outputLabel id="outFecha" value="#{recetaexternaMb.fecha}"/>
                                     </p:panelGrid>
 
-                                    <p:panelGrid columns="4">
+                                    <p:panelGrid columns="2">
 
                                         <f:facet name="header">Datos Paciente</f:facet>
 
                                         <h:outputLabel  value="R.U.N paciente: "/>
                                         <p:outputLabel  id="outRun" value="#{recetaexternaMb.txt}"/>
 
-                                        <h:outputLabel  for="outEdad" value="Edad: "/>
-                                        <p:outputLabel id="outEdad" value="#{recetaexternaMb.edad}"/>
-
                                         <h:outputLabel  value="Nombre paciente: "/>
                                         <p:outputLabel id="outNombre" value="#{recetaexternaMb.nombre}"/>
+
+                                        <h:outputLabel  for="outEdad" value="Edad: "/>
+                                        <p:outputLabel id="outEdad" value="#{recetaexternaMb.edad}"/>
 
                                     </p:panelGrid>
                                     <p:panelGrid columns="2">
@@ -153,43 +145,23 @@
                                         <p:outputLabel id="nombreDoc" value="#{login.contrasena} #{login.apellido}"/>
                                     </p:panelGrid>
                                 </p:panelGrid>
-                            </div>
-
-                            <br/>
-
-
-                            <p:panel id="soloImpresion" header="Rp" visible="false" >
-                                <p:inputText value="">
-                                   
-                                </p:inputText>
-                            </p:panel>
-
-                           
                                 <br/>
-                                <div align="center">
+                                <p:panelGrid columns="1">
                                     <f:facet name="header">Rp.</f:facet>
-                                    <p:inputTextarea id="editor" value="#{recetaexternaMb.text}" >
+                                    <p:inputTextarea id="editor" value="#{recetaexternaMb.text}" rows="10" cols="70">
                                         <p:ajax event="blur" update="editor" listener="#{recetaexternaMb.truco()}" />
                                     </p:inputTextarea>
-                                </div>
 
-                                <p:dialog header="Content" widgetVar="dlg" showEffect="fade" hideEffect="fade" modal="true">
-                                    <h:outputText id="display" value="#{recetaexternaMb.text}" escape="false" />
-                                </p:dialog>
+                                </p:panelGrid>
 
-
-
-                                <br> </br>
-                                <h4 align="right">________________________</h4>
-                                <h4 align="right">Firma/Timbre Médico</h4>
-                                <br> </br>
-                                <br> </br>
-                                <h4 align="left">Talón para adjuntar a la ficha clínica</h4>
-                            
-
-
-
-
+                            </div>
+                            <br/>
+                            <br/>
+                            <h4 align="right">________________________</h4>
+                            <h4 align="right">Firma/Timbre Médico</h4>
+                            <br/> 
+                            <br/> 
+                            <h4 align="left">Talón para adjuntar a la ficha clínica</h4>
 
                         </p:panel>
                         <div id="bottom">

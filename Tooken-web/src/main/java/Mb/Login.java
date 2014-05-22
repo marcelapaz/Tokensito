@@ -68,7 +68,7 @@ public class Login {
         if(prof.getFirstName().equals(pass)){
             this.apellido = prof.getLastName();
             FacesContext.getCurrentInstance().getExternalContext().redirect("inicio.xhtml");
-            context.addMessage(null, new FacesMessage("Welcome", getUser() ));
+            context.addMessage(null, new FacesMessage("Welcome" +user+""+apellido, getUser() ));
             
         }
         else{
