@@ -96,7 +96,7 @@
                             <br/>
 
                             <div  align="center">
-                                
+
                                 <p:panelGrid columns="3" styleClass="noPrintBlock" id="buscador">
                                     <f:facet name="header">
                                         Búsqueda               
@@ -164,14 +164,50 @@
                             <h4 align="left">Talón para adjuntar a la ficha clínica</h4>
 
                         </p:panel>
-                        <div id="bottom">
+
+                        <div align="center">
+
+                            <p:commandButton type="button" onclick="popup.show()" value="Imprimir"  />
+                            <p:dialog widgetVar="popup" header="Autenticacion" effect="FADE" fixedCenter="true" >
+                                <h:panelGrid columns="2" cellpadding="5">
+                                    <f:facet name="header">
+                                        <p:messages id="msgs" />
+                                    </f:facet>
+                                    <h:outputLabel for="username" value="Usuario:" />
+                                    <p:inputText value="#{recetaexternaMb.userPrint}"
+                                                 id="username" required="true" label="username" />
+
+                                    <h:outputLabel for="password" value="Contraseña" />
+                                    <p:password value="#{recetaexternaMb.passPrint}"
+                                                id="password" required="true" label="password" />
+                                    <p:commandButton id="loginButton" value="Aceptar" type="button" update="panelGeneral" action="#{recetaexternaMb.validacion()}">
+                                        <p:printer target="panelGeneral"   />
+                                    </p:commandButton>
+
+                                    <h:outputText>
+                                        <f:event type="preRenderComponent" listener="#{recetaexternaMb.getSomeValue}" />
+                                    </h:outputText>
+                                </h:panelGrid>
+
+
+                            </p:dialog>
+                        </div>
+
+
+
+
+
+
+
+
+                        <!--<div id="bottom">
                             <ui:insert name="bottom"></ui:insert>
                             <div align="center">
-                                <p:commandButton value="Imprimir" type="button" update="display" action="#{recetaexternaMb.truco(text)}">
+                                <p:commandButton value="Imprimir" type="button" update="display" action="">
                                     <p:printer target="panelGeneral"   />
                                 </p:commandButton>
                             </div>
-                        </div>
+                        </div>-->
 
 
                     </h:form> 

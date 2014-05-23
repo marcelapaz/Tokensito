@@ -7,21 +7,26 @@ package Mb;
 
 import entity.Clinicalrecords;
 import entity.Patients;
+import entity.Professionals;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Map;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AbortProcessingException;
 import session.ClinicalrecordsFacadeLocal;
 import session.FarmacoFacadeLocal;
 import session.FfFarmacoFacadeLocal;
 import session.FormaFarmaceuticaFacadeLocal;
 import session.PatientsFacadeLocal;
 import session.PrevisionFacadeLocal;
+import session.ProfessionalsFacadeLocal;
 
 /**
  *
@@ -46,6 +51,10 @@ public class RecetaExternaMb {
     private ClinicalrecordsFacadeLocal clinicalrecordsFacade;
     @EJB
     private PatientsFacadeLocal patientsFacade;
+    @EJB
+    private ProfessionalsFacadeLocal professionalsFacade;
+    
+   
 
     int ano;
     int mes;
@@ -62,6 +71,39 @@ public class RecetaExternaMb {
     String fecha;
     String txt;
     String domicilio;
+    String lastMessage;
+    String user;
+    String contrasena;
+    String apellido;
+    String userPrint;
+    String passPrint;
+
+    public String getUserPrint() {
+        return userPrint;
+    }
+
+    public void setUserPrint(String userPrint) {
+        this.userPrint = userPrint;
+    }
+
+    public String getPassPrint() {
+        return passPrint;
+    }
+
+    public void setPassPrint(String passPrint) {
+        this.passPrint = passPrint;
+    }
+
+    
+    public String getLastMessage() {
+        return lastMessage;
+    }
+
+    public void setLastMessage(String lastMessage) {
+        this.lastMessage = lastMessage;
+    }
+    
+    
 
     public String getDomicilio() {
         return domicilio;
@@ -103,9 +145,7 @@ public class RecetaExternaMb {
         this.fecha = fecha;
     }
 
-    public RecetaExternaMb() {
-    }
-
+ 
     public int getAno() {
         Calendar fecha = new GregorianCalendar();
         ano = fecha.get(Calendar.YEAR);
@@ -196,11 +236,53 @@ public class RecetaExternaMb {
     public void setText(String text) {
         this.text = text;
     }
-
-    public void truco() {
-        System.out.println(text);
-
+    
+    public String getUser() {
+        return user;
     }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public String getContrasena() {
+        return contrasena;
+    }
+
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+    
+    
+    
+    public void validacion() throws IOException{
+        String usuario=getUser();
+        String pass=getContrasena();
+        FacesContext context = FacesContext.getCurrentInstance();
+        
+        Professionals prof=professionalsFacade.find(usuario);
+        
+        if(prof.getFirstName().equals(pass) && usuario.equalsIgnoreCase(userPrint) && pass.equalsIgnoreCase(passPrint)){
+            this.apellido = prof.getLastName();
+            FacesContext.getCurrentInstance().getExternalContext();
+            context.addMessage(null, new FacesMessage("Welcome" +user+""+apellido, getUser() ));
+            System.out.println(text);
+            
+        }
+        else{
+             context.addMessage(null, new FacesMessage("Usuario Invalido", "Verificar usuario o contraseña" ));
+        }
+        
+    }
+
 
    
     
@@ -310,6 +392,18 @@ public class RecetaExternaMb {
         }
 
         return results;
+    }
+    
+    public void getSomeValue() throws AbortProcessingException {
+        FacesContext context = FacesContext.getCurrentInstance();
+        Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
+
+        //Whatever you need to do
+
+        String message =
+                "The Result you wish to display";
+
+        requestMap.put("lastMessage", message);
     }
 
 }
