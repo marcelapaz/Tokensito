@@ -20,6 +20,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
+import javax.faces.event.ActionEvent;
+import javax.inject.Inject;
+import javax.swing.JOptionPane;
 import session.ClinicalrecordsFacadeLocal;
 import session.FarmacoFacadeLocal;
 import session.FfFarmacoFacadeLocal;
@@ -27,6 +30,7 @@ import session.FormaFarmaceuticaFacadeLocal;
 import session.PatientsFacadeLocal;
 import session.PrevisionFacadeLocal;
 import session.ProfessionalsFacadeLocal;
+import org.primefaces.event.CloseEvent;
 
 /**
  *
@@ -34,8 +38,8 @@ import session.ProfessionalsFacadeLocal;
  */
 @ManagedBean(name = "recetaexternaMb")
 @RequestScoped
-public class RecetaExternaMb {
 
+public class RecetaExternaMb {
     
     @EJB
     private FormaFarmaceuticaFacadeLocal formaFarmaceuticaFacade;
@@ -53,8 +57,6 @@ public class RecetaExternaMb {
     private PatientsFacadeLocal patientsFacade;
     @EJB
     private ProfessionalsFacadeLocal professionalsFacade;
-    
-   
 
     int ano;
     int mes;
@@ -77,6 +79,23 @@ public class RecetaExternaMb {
     String apellido;
     String userPrint;
     String passPrint;
+    String verificar;
+
+ 
+   public RecetaExternaMb(){
+       nombre="manuel";
+       contrasena="123";
+       
+   }
+    
+    public String getVerificar() {
+        return verificar;
+    }
+
+    public void setVerificar(String verificar) {
+        this.verificar = verificar;
+    }
+    
 
     public String getUserPrint() {
         return userPrint;
@@ -94,7 +113,6 @@ public class RecetaExternaMb {
         this.passPrint = passPrint;
     }
 
-    
     public String getLastMessage() {
         return lastMessage;
     }
@@ -102,8 +120,6 @@ public class RecetaExternaMb {
     public void setLastMessage(String lastMessage) {
         this.lastMessage = lastMessage;
     }
-    
-    
 
     public String getDomicilio() {
         return domicilio;
@@ -145,7 +161,6 @@ public class RecetaExternaMb {
         this.fecha = fecha;
     }
 
- 
     public int getAno() {
         Calendar fecha = new GregorianCalendar();
         ano = fecha.get(Calendar.YEAR);
@@ -159,7 +174,7 @@ public class RecetaExternaMb {
     public int getMes() {
         Calendar fecha = new GregorianCalendar();
         mes = fecha.get(Calendar.MONTH);
-        return mes;
+        return mes + 1;
     }
 
     public void setMes(int mes) {
@@ -236,7 +251,7 @@ public class RecetaExternaMb {
     public void setText(String text) {
         this.text = text;
     }
-    
+
     public String getUser() {
         return user;
     }
@@ -261,31 +276,68 @@ public class RecetaExternaMb {
         this.apellido = apellido;
     }
     
-    
-    
-    public void validacion() throws IOException{
-        String usuario=getUser();
-        String pass=getContrasena();
+
+    public void validacion2() throws IOException {
+        System.out.println("entré :DDDDDDDDDDD");
+
+        String usuario = Login.user;
+        String pass = Login.contrasena;
+        System.out.println(usuario +" "+pass);
         FacesContext context = FacesContext.getCurrentInstance();
-        
-        Professionals prof=professionalsFacade.find(usuario);
-        
-        if(prof.getFirstName().equals(pass) && usuario.equalsIgnoreCase(userPrint) && pass.equalsIgnoreCase(passPrint)){
+
+        Professionals prof = professionalsFacade.find(usuario);
+
+        if (prof.getFirstName().equals(pass) && usuario.equalsIgnoreCase(userPrint) && pass.equalsIgnoreCase(passPrint)) {
             this.apellido = prof.getLastName();
             FacesContext.getCurrentInstance().getExternalContext();
-            context.addMessage(null, new FacesMessage("Welcome" +user+""+apellido, getUser() ));
-            System.out.println(text);
-            
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Welcome" + user + "" + apellido, getUser()));
+            verificar = "Si";
+            System.out.println("Soy VALIDO!!!!!!!!!! :DDDDDDDDDDD");
+            //this.dispose(); 
+
+        } else {
+            verificar = "No";
+            System.out.println("NO Soy VALIDO!!!!!!!!!! :DDDDDDDDDDD");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("RecetaExterna.xhtml");
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Usuario Invalido", "Verificar usuario o contraseña"));
         }
-        else{
-             context.addMessage(null, new FacesMessage("Usuario Invalido", "Verificar usuario o contraseña" ));
-        }
-        
+
+    }
+    
+    public void comparar(){
+        System.out.println("entre a comparar");
+        if(nombre.equals(userPrint) && contrasena.equals(passPrint)){
+        verificar="Si";
+        }else{
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Usuario Invalido", "Verificar usuario o contraseña"));
+                verificar="No";
+                }
+    
     }
 
+    public void validacion() throws IOException {
+        System.out.println("entré :DDDDDDDDDDD");
+        String usuario = getUserPrint();
+        String pass = getPassPrint();
+        FacesContext context = FacesContext.getCurrentInstance();
+        //Professionals prof=professionalsFacade.find(usuario);
 
-   
-    
+        //if(prof.getFirstName().equals(pass)){
+        context.addMessage(null, new FacesMessage("Welcome", "asd"));
+            //this.apellido = prof.getLastName();
+        //FacesContext.getCurrentInstance().getExternalContext().redirect("inicio.xhtml");
+
+        //}
+        //else{
+        //context.addMessage(null, new FacesMessage("Usuario Invalido", "asd" ));
+        //}
+    }
+
+    public void truco() {
+        System.out.println(text);
+    }
+
     public void mostrarDomicilio() {
         String rut = getBusca();
         this.txt = rut;
@@ -345,37 +397,30 @@ public class RecetaExternaMb {
         this.ficha = listaClinical.get(0).getCrecid().toString();
 
     }
-    
- 
 
     public void botonAct() {
 
         FacesContext context = FacesContext.getCurrentInstance();
         System.out.println("entre boton");
-        
-        if("".equals(busca) || busca==null){
-            context.addMessage(null, new FacesMessage("ERROR", "Debe ingresar un RUN obligatoriamente" ));
-        }
-        else{
-            try{
-            System.out.println("rut valido");
-            mostrarDomicilio();
-            mostrarEdad();
-            mostrarFecha();
-            mostrarNombre();
-            mostrarFicha();
-            context.addMessage(null, new FacesMessage("Successful", "Datos obtenidos")); 
-            }catch(NullPointerException e){
-                context.addMessage(null, new FacesMessage("ERROR", "RUN no encontrado" ));
+
+        if ("".equals(busca) || busca == null) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "ERROR", "Debe ingresar un RUN obligatoriamente"));
+        } else {
+            try {
+                System.out.println("rut valido");
+                mostrarDomicilio();
+                mostrarEdad();
+                mostrarFecha();
+                mostrarNombre();
+                mostrarFicha();
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Datos obtenidos"));
+            } catch (NullPointerException e) {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "ERROR", "RUN no encontrado"));
             }
-            
+
         }
-       
+
     }
-        
-        
-        
-    
 
     public List<String> complete(String query) {
         List<String> results = new ArrayList<String>();
@@ -393,17 +438,26 @@ public class RecetaExternaMb {
 
         return results;
     }
-    
+
     public void getSomeValue() throws AbortProcessingException {
         FacesContext context = FacesContext.getCurrentInstance();
         Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
 
         //Whatever you need to do
-
-        String message =
-                "The Result you wish to display";
+        String message
+                = "The Result you wish to display";
 
         requestMap.put("lastMessage", message);
+    }
+
+    private void dispose() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void destroyWorld() {
+        System.out.println("entré a destroy!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "ERROR", "RUN no encontrado"));
     }
 
 }

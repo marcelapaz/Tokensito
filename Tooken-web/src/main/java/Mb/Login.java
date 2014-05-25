@@ -25,10 +25,20 @@ public class Login {
     @EJB
     private ProfessionalsFacadeLocal professionalsFacade;
 
-    String user;
-    String contrasena;
+    public static String user;
+    public static String contrasena;
     String apellido;
+    boolean verificacion;
     
+
+    public boolean isVerificacion() {
+        return verificacion;
+    }
+
+    public void setVerificacion(boolean verificacion) {
+        this.verificacion = verificacion;
+    }
+   
     public Login() {
     }
 
@@ -66,9 +76,10 @@ public class Login {
         Professionals prof=professionalsFacade.find(usuario);
         
         if(prof.getFirstName().equals(pass)){
+            context.addMessage(null, new FacesMessage("Welcome" +user+""+apellido, getUser() ));
             this.apellido = prof.getLastName();
             FacesContext.getCurrentInstance().getExternalContext().redirect("inicio.xhtml");
-            context.addMessage(null, new FacesMessage("Welcome" +user+""+apellido, getUser() ));
+            
             
         }
         else{

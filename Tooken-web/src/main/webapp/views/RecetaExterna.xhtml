@@ -51,7 +51,7 @@
                 }
 
             </style>
-            <h:form>  
+            <h:form class="noPrintBlock">  
 
                 <p:menubar>
 
@@ -77,8 +77,16 @@
 
                 <div id="content" class="right_content">
                     <ui:insert name="content"></ui:insert>
-
-                    <h:form>
+                    <script language="JavaScript" type="text/javascript">
+                            function imprimir() {
+                                window.alert("Entre a impirmir");
+                                var bulean = document.getElementById('form1:texto').value;
+                                if (bulean === "Si") {
+                                    window.print();
+                                }
+                            }
+                        </script>
+                    <h:form id="form1">
 
                         <p:panel id="panelGeneral" style="border: #ffffff">
                             <p:growl id="messages" showDetail="true"/>
@@ -148,9 +156,8 @@
                                 <br/>
                                 <p:panelGrid columns="1">
                                     <f:facet name="header">Rp.</f:facet>
-                                    <p:inputTextarea id="editor" value="#{recetaexternaMb.text}" rows="10" cols="70">
-                                        <p:ajax event="blur" update="editor" listener="#{recetaexternaMb.truco()}" />
-                                    </p:inputTextarea>
+                                    <p:editor id="editor" value="#{recetaexternaMb.text}"/>
+                                        
 
                                 </p:panelGrid>
 
@@ -165,35 +172,49 @@
 
                         </p:panel>
 
-                        <div align="center">
-
+                        <div align="center" class="noPrintBlock">
                             <p:commandButton type="button" onclick="popup.show()" value="Imprimir"  />
-                            <p:dialog widgetVar="popup" header="Autenticacion" effect="FADE" fixedCenter="true" >
-                                <h:panelGrid columns="2" cellpadding="5">
-                                    <f:facet name="header">
-                                        <p:messages id="msgs" />
-                                    </f:facet>
-                                    <h:outputLabel for="username" value="Usuario:" />
+                            <p:growl id="message" showDetail="true" life="3000" />
+                            <p:dialog widgetVar="popup" header="Autenticacion" showEffect="fade" hideEffect="explode" >
+                                <p:panelGrid columns="2">
+
+                                    <p:outputLabel for="username" value="Usuario:" />
                                     <p:inputText value="#{recetaexternaMb.userPrint}"
-                                                 id="username" required="true" label="username" />
+                                                 id="username" label="username" />
 
-                                    <h:outputLabel for="password" value="Contraseña" />
+                                    <p:outputLabel for="password" value="Contraseña" />
                                     <p:password value="#{recetaexternaMb.passPrint}"
-                                                id="password" required="true" label="password" />
-                                    <p:commandButton id="loginButton" value="Aceptar" type="button" update="panelGeneral" action="#{recetaexternaMb.validacion()}">
-                                        <p:printer target="panelGeneral"   />
-                                    </p:commandButton>
+                                                id="password" label="password" />
+                                    <p:commandButton id="loginButton" value="Aceptar" actionListener="#{recetaexternaMb.comparar()}" update="texto,message" oncomplete="imprimir()"/>
+                       
+                                    <p:inputText id="texto" type="hidden" value="#{recetaexternaMb.verificar}"/>
 
-                                    <h:outputText>
-                                        <f:event type="preRenderComponent" listener="#{recetaexternaMb.getSomeValue}" />
-                                    </h:outputText>
-                                </h:panelGrid>
-
-
+                                </p:panelGrid>
                             </p:dialog>
                         </div>
 
+                        <!--<div align="center">
 
+                            <p:growl id="message" showDetail="true" />
+
+                            <p:commandButton value="Imprimir" >
+                                <p:confirm header="Autenticación" message="Para poder imprimir ingrese su usuario y contraseña" icon="ui-icon-alert" />
+                            </p:commandButton>
+
+                            <p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+                                <h:panelGrid columns="2" cellpadding="5">
+                                <h:outputLabel for="username" value="Usuario:" />
+                                <p:inputText value="#{recetaexternaMb.userPrint}" id="username" required="true" label="username" />
+                                <h:outputLabel for="password" value="Contraseña:" />
+                                <p:password value="#{recetaexternaMb.passPrint}" id="password" required="true" label="password" />
+                                <p:commandButton value="Aceptar" actionListener="#{recetaexternaMb.comparar()}" update="texto,message" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" oncomplete="imprimir()"/>
+                                <p:commandButton value="Cancelar" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                <p:inputText id="texto" type="hidden" value="#{recetaexternaMb.verificar}"/>
+                                </h:panelGrid>
+                            </p:confirmDialog>
+                        </div>-->
+
+                        
 
 
 

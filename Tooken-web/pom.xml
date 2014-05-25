@@ -22,7 +22,7 @@
     <dependencies>
         <dependency>
             <groupId>org.primefaces.themes</groupId>  
-            <artifactId>all-themes</artifactId>  
+            <artifactId>cupertino</artifactId>  
             <version>1.0.10</version>
         </dependency>
         <dependency>
