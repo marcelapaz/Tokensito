@@ -41,6 +41,8 @@ import org.primefaces.event.CloseEvent;
 
 public class RecetaExternaMb {
     
+    @Inject
+    LoginSessionMB session;
     @EJB
     private FormaFarmaceuticaFacadeLocal formaFarmaceuticaFacade;
     @EJB
@@ -83,8 +85,6 @@ public class RecetaExternaMb {
 
  
    public RecetaExternaMb(){
-       nombre="manuel";
-       contrasena="123";
        
    }
     
@@ -174,7 +174,7 @@ public class RecetaExternaMb {
     public int getMes() {
         Calendar fecha = new GregorianCalendar();
         mes = fecha.get(Calendar.MONTH);
-        return mes + 1;
+        return mes;
     }
 
     public void setMes(int mes) {
@@ -305,8 +305,9 @@ public class RecetaExternaMb {
     }
     
     public void comparar(){
-        System.out.println("entre a comparar");
-        if(nombre.equals(userPrint) && contrasena.equals(passPrint)){
+        System.out.println("entre a comparar"+ session.getRut()+" "+ session.getContrasena());
+        
+        if(session.getRut().equals(userPrint) && session.getContrasena().equals(passPrint)){
         verificar="Si";
         }else{
             FacesContext context = FacesContext.getCurrentInstance();
@@ -360,8 +361,10 @@ public class RecetaExternaMb {
 
         Patients persona = patientsFacade.find(rut);
         System.out.println("direccion: " + persona.getDateOfBirth().toString());
-        String datoPersona = persona.getDateOfBirth().toString();
-        this.edad = datoPersona;
+        String datoPersona = persona.getDateOfBirth();
+        String [] lista = datoPersona.split("-");
+        edad = (getAno() - Integer.parseInt(lista[2]))+"";
+        
     }
 
     public void mostrarNombre() {
@@ -378,7 +381,7 @@ public class RecetaExternaMb {
 
         Calendar fecha2 = new GregorianCalendar();
 
-        this.fecha = fecha2.get(Calendar.DAY_OF_MONTH) + "/" + fecha2.get(Calendar.MONTH) + "/" + fecha2.get(Calendar.YEAR);
+        this.fecha = fecha2.get(Calendar.DAY_OF_MONTH) + "/" + (fecha2.get(Calendar.MONTH)+1) + "/" + fecha2.get(Calendar.YEAR);
     }
 
     public void mostrarFicha() {
