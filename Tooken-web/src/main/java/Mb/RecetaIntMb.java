@@ -58,7 +58,6 @@ public class RecetaIntMb {
     @EJB
     private PatientsFacadeLocal patientsFacade;
     
-    
     String txt;
     String edad;
     String nombre;
