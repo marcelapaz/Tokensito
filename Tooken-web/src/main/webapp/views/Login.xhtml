@@ -26,17 +26,20 @@
                 <p:panel id="panel" header="Ingresar Usuario y Contraseña">
                     <p:growl id="messages" showDetail="true"/>
                     <h:panelGrid columns="2" cellpadding="5">
+                        <f:facet name="header">
+                            <p:messages id="msgs" />
+                        </f:facet>
                         <h:outputLabel for="username" value="Usuario:" />
-                        <p:inputText value="#{login.user}"
+                        <p:inputText value="#{loginMB.user}"
                                      id="username" required="true" label="username" />
 
                         <h:outputLabel for="password" value="Contraseña" />
-                        <p:password value="#{login.contrasena}"
+                        <p:password value="#{loginMB.password}"
                                        id="password" required="true" label="password" />
                         <f:facet name="footer">
                             <p:commandButton id="loginButton" value="Login" icon="../images/login.png" update="panel"
                                              
-                                             oncomplete="handleLoginRequest(xhr, status, args)" action="#{login.validacion()}"/>
+                                              action="#{loginMB.login()}"/>
                         </f:facet>
                     </h:panelGrid>
                 </p:panel>

@@ -10,28 +10,106 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <h:outputStylesheet name="./css/default.css"/>
         <h:outputStylesheet name="./css/cssLayout.css"/>
-        <title></title>
+        <h:outputStylesheet name="./css/print.css"/>
+        <title>Hosp. Barros Luco</title>
     </h:head>
 
     <h:body>
 
         <div id="top">
-            <ui:insert name="top">Top</ui:insert>
+            <ui:insert name="top"></ui:insert>
+            <!--<h2 align="center" style="font-style: inherit">hola</h2>-->
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <h:outputStylesheet name="./css/default.css"/>
+            <h:outputStylesheet name="./css/cssLayout.css"/>
+            <h:outputStylesheet name="./css/print.css"/>
+            <title>Hosp. Barros Luco</title>
+            <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
+            <link type="text/css" rel="stylesheet" href="#{request.contextPath}/themes/aristo/skin.css" />
+            <link type="text/css" rel="stylesheet" href="#{request.contextPath}/syntaxhighlighter/styles/syntaxhighlighter.css"></link>
+            <style type="text/css">
+
+                body {
+                    background: url(../resources/imagenes/fondo-img.jpg) center fixed no-repeat;
+                    margin: 0;
+                    padding: 0;
+                    font-family: geneva, arial, helvetica, sans-serif;
+                    font-size:80%;
+                }
+
+                .appleIcon {
+                    background: url(../resources/imagenes/apple-icon-16x16.png) no-repeat;
+                    width:16px;
+                    height:16px;
+                }
+
+                .ui-dialog .ui-terminal {
+                    border:0;
+                }
+
+                .ui-dialog.terminalDialog .ui-dialog-content {
+                    padding:0;
+                }
+            </style>
+            <h:form>
+                <p:menubar>
+
+                    <p:menuitem value="Inicio" icon="ui-icon-home" url="../views/inicio.xhtml" />
+
+                    <p:submenu label="Documentos" icon="ui-icon-document">
+                        <p:menuitem value="Receta Externa" url="../views/RecetaExterna.xhtml" icon="" />
+                        <p:menuitem value="Receta Interna" url="../views/RecetaInterna.xhtml" icon="" />
+
+                    </p:submenu>
+                    <p:submenu label="Exámenes" icon="ui-icon-document-b">
+                        <p:menuitem value="Laboratorio" url="../views/ExLaboratorio.xhtml" icon="" />
+                        <p:menuitem value="TNS" url="../views/ExTns.xhtml" icon="" />
+
+                    </p:submenu>
+                    <p:submenu label="Generar alta" icon="ui-icon-document-b">
+                        <p:menuitem value="Contrarreferencia" url="../views/ContraRef.xhtml" icon="" />
+
+
+                    </p:submenu>
+                    <f:facet name="options">
+                        <div  style="margin-right:400px ;width: 25%;height: 20%">
+                            <p:clock/>
+                        </div>
+                        <p:outputLabel value="Bienvenido " style="margin-right:10px;font-weight: bold"/>
+                        <p:outputLabel value="Dr. : " style="margin-right:10px;font-weight: bold"/>
+                        <p:outputLabel value="#{loginSessionMB.nombre} #{loginSessionMB.apellido}" style="margin-right:10px"/>
+                        <p:commandButton type="button" value="Cerrar Sesión" icon="ui-icon-extlink" />
+                    </f:facet>
+                </p:menubar>
+
+            </h:form>
         </div>
         <div>
-            <div id="left">
-                <ui:insert name="left">Left</ui:insert>
-            </div>
-            <div>
-                <div id="right">
-                    <ui:insert name="right">Right</ui:insert>
-                </div>
-                <div id="content" class="right_content">
-                    <ui:insert name="content"></ui:insert>
 
-                    <h:form>    
-                        <p:panel id="panelGeneral" style="border: #ffffff">
-                            <p:growl id="messages" showDetail="true"/>
+
+            <div id="content" class="right_content">
+                <ui:insert name="content"></ui:insert>
+                <script language="JavaScript" type="text/javascript">
+                    function imprimir() {
+                        var bulean = document.getElementById('form1:texto').value;
+                        if (bulean === "Si") {
+                            window.print();
+                        }
+                    }
+                    function gopopup() {
+                        var rpta = document.getElementById('form1:texto1').value;
+                        if (rpta === "si") {
+
+                            popup.show();
+                        }
+                    }
+                </script>
+
+
+                <div class="printBlock" style="width: 100%" align="center">
+                    <h:form id="form1">    
+                        <p:panel id="panelGeneral" styleClass="printBlock" style="border: #ffffff,width: 100%,text-align: center">
+                            <p:growl id="messages" showDetail="true" life="800"/>
                             <p:panel id="datoshospital">
                                 <h3 style="font-weight: bold" align="center">RECETA CHEQUE PARA ESTUPEFACIENTES Y PRODUCTOS PSICOTRÓPICOS</h3>
                                 <h4 align="center">"Receta válida para uso interno"</h4>
@@ -39,129 +117,173 @@
 
 
 
-                            
+
                                 <h:panelGrid columns="1" cellpadding="5" >
-                                    <h:outputLabel value="Complejo Asistencial Barros Luco"/>
-                                    <h:outputLabel value="Municipalidad San Miguel"/>
-                                    <h:outputLabel value="Servicio de Salud"/>
+                                    <h:outputLabel value="MINISTERIO DE SALUD PUBLICA"/>
+                                    <h:outputLabel value="SERVICIO DE SALUD M SUR"/>
+                                    <h:outputLabel value="HOSPITAL BARROS LUCO TRUDEAU"/>
                                 </h:panelGrid>
                             </p:panel>   
-                            
-                            <p:panel id="buscador">
+
+                            <p:panel id="buscador" styleClass="noPrintBlock">
                                 <div  align="center">
-                                <h:panelGrid columns="3" cellpadding="5">
-                                    
+                                    <h:panelGrid columns="3" cellpadding="5">
+
                                         <h:outputLabel  value="R.U.N paciente: "/>
                                         <p:autoComplete  id="acSimple" value="#{recetaIntMb.busca}"
                                                          completeMethod="#{recetaIntMb.complete}" size="35" placeholder="Ingrese RUN...">
 
                                         </p:autoComplete>
-                                        <p:commandButton value="Buscar" action="#{recetaIntMb.botonAct()}" update="panelGeneral"  />
-                                    
-                                </h:panelGrid>
+
+                                        <p:commandButton action="#{recetaIntMb.botonAct()}" update="outRun,outNombre,outEdad,outFicha,outDomicilio,outTipo,outFecha,messages" id="iconSearch"  icon="ui-icon-search" title="Icon Search" />
+                                    </h:panelGrid>
                                 </div>
                             </p:panel>
-                            
+
                             <p:panel id="datosTodos">
-                            
-                                <p:panel id="datospaciente" header="1.- Datos paciente:">
+
+                                <p:panel id="datospaciente" header="Datos paciente">
 
 
 
                                     <h:outputLabel  style="font-weight: bold" />
                                     <br/>
-                                    <h:panelGrid columns="6" cellpadding="5">
+                                    <p:panelGrid columns="4" style="width: 100%;text-align: left">
 
 
                                         <h:outputLabel  value="R.U.N paciente: "/>
                                         <p:outputLabel  id="outRun" value="#{recetaIntMb.txt}"/>
 
                                         <h:outputLabel  value="Nombre paciente: "/>
-                                        <p:inputText size="26" id="outNombre" value="#{recetaIntMb.nombre}"/>
+                                        <p:outputLabel id="outNombre" value="#{recetaIntMb.nombre}"/>
 
                                         <h:outputLabel  for="outEdad" value="Edad: "/>
-                                        <p:inputText id="outEdad" size="26"  value="#{recetaIntMb.edad}"/>
+                                        <p:outputLabel id="outEdad"  value="#{recetaIntMb.edad}"/>
 
 
 
                                         <h:outputLabel  value="N° ficha: "/>
-                                        <p:inputText size="26" id="outFicha" value="#{recetaIntMb.ficha}"/>
+                                        <p:outputLabel id="outFicha" value="#{recetaIntMb.ficha}"/>
 
                                         <h:outputLabel  value="Domicilio: "/>
-                                        <p:inputText size="26" id="outDomicilio" value="#{recetaIntMb.domicilio}"/>
+                                        <p:outputLabel id="outDomicilio" value="#{recetaIntMb.domicilio}"/>
 
                                         <h:outputLabel  value="Tipo de atención: "/>
-                                        <p:inputText size="26" value="#{recetaIntMb.prevision}"/>
-
-                                        <h:outputLabel  value="Fecha: "/>
-                                        <p:inputText size="26" id="outFecha" value="#{recetaIntMb.fecha}"/>
-
-                                        <h:outputLabel  value="Nombre de quien retira: "/>
-                                        <p:inputText size="26"/>
+                                        <p:outputLabel id="outTipo" value="#{recetaIntMb.prevision}"/>
 
                                         <h:outputLabel value="R.U.N de quien retira: "/>
-                                        <p:inputText size="26"/>
+                                        <p:outputLabel/>
 
-                                    </h:panelGrid>
+                                        <h:outputLabel  value="Nombre de quien retira: "/>
+                                        <p:outputLabel/>
+
+                                        <h:outputLabel  value="Fecha: "/>
+                                        <p:outputLabel id="outFecha" value="#{recetaIntMb.fecha}"/>
+
+                                    </p:panelGrid>
 
                                 </p:panel>
 
+                                <p:panelGrid columns="1" style="width: 100%;text-align: center">
 
-                                <p:panel id="datosMedicamentos" header="2.- Datos Medicamentos:">
+                                    <f:facet name="header">Rp.</f:facet>
 
-                                    
+                                    <p:editor style="width: 100%"  id="editor" value="#{recetaIntMb.descrpcion}"/>
+
+
+                                </p:panelGrid>
+
+
+                                <p:panel id="datosMedicamentos" header="Datos Medicamentos" styleClass="noPrintBlock" style="width: 100%,text-align: center">
+
+
                                     <br/>
-                                    <h:panelGrid  columns="6" cellpadding="5">
-
-
+                                    <h:panelGrid  columns="4" cellpadding="5">
                                         <h:outputLabel  value="Medicamento: "/>
-                                        <p:autoComplete   value="#{recetaIntMb.buscaFarmaco}" 
-                                                         completeMethod="#{recetaIntMb.complete2}" size="26" placeholder="Ingrese Farmaco...">
-                                            <p:ajax event="blur" listener="#{recetaIntMb.mostrarForma()}"  update="datosMedicamentos" />
+                                        <p:autoComplete  id="med" value="#{funcionQl.buscaFarmaco}" 
+                                                         completeMethod="#{funcionQl.complete2}" size="22" placeholder="Ingrese Farmaco...">
+                                            <p:ajax event="itemSelect" listener="#{funcionQl.mostrarForma()}" update="forma"/>
+
                                         </p:autoComplete>
 
+
                                         <h:outputLabel value="Forma farmacéutica: "/>
-                                        <p:selectOneMenu id="forma"  style="width:150px" >
-                                           
-                                            <f:selectItem itemLabel="Seleccione farmaco" itemValue="" noSelectionOption="true" />
-                                            <f:selectItems value="#{recetaIntMb.formaFarm}" />
+                                        <p:selectOneMenu id="forma" value="#{funcionQl.ff}" >
+                                            <f:selectItem itemLabel="Seleccione forma" noSelectionOption="true" itemValue="#{n}" />
+                                            <f:selectItems value="#{funcionQl.formaFarm}"  var="n" itemLabel="#{n}" itemValue="#{n}"  />
+                                            <p:ajax listener="#{funcionQl.mostrarDosis()}" update="dosis"/>
+
+
                                         </p:selectOneMenu>
 
-                                        <h:outputLabel  value="Dosis de presentación: "/>
-                                        <p:inputText size="26"/>
 
                                         <h:outputLabel  value="Periodo de tratamiento: "/>
-                                        <p:inputText size="26" />
+                                        <p:inputText id="per"  size="22" value="#{funcionQl.periodo}"/>
+
+                                        <h:outputLabel  for="dosis" value="Dosis de presentación: "/>
+                                        <p:selectOneMenu id="dosis" value="#{funcionQl.dosis2}" >
+
+                                            <f:selectItem itemLabel="Seleccione dosis" itemValue="#{null}" />
+                                            <f:selectItems value="#{funcionQl.dosis}"/>
+                                        </p:selectOneMenu>
 
                                         <h:outputLabel value="Unidades a despachar: "/>
-                                        <p:inputText size="26"/>
+                                        <p:inputText id="uni"  size="22" value="#{funcionQl.unidades}"/>
+
+                                        <p:commandButton action="#{funcionQl.validarBotonMas()}" update="tabla,med,forma,dosis,per,uni,message" id="iconPlus"  icon="ui-icon-plusthick" title="Icon Plus" />
                                     </h:panelGrid>
                                 </p:panel>
 
-                                <p:panel id="datosDoctor" header="3.- Datos Doctor:">
-                                    
-                                    
+                                <p:panel id="datosDoctor" header="Datos Doctor">
 
-                                    <h:panelGrid  columns="6" cellpadding="5">
+
+
+                                    <h:panelGrid  columns="2" cellpadding="5">
                                         <h:outputLabel  value="Nombre doctor: "/>
-                                        <p:inputText size="26" value="#{login.contrasena}"/>
+                                        <p:outputLabel value="#{loginSessionMB.nombre} #{loginSessionMB.apellido}"/>
 
                                         <h:outputLabel value="R.U.N doctor: "/>
-                                        <p:inputText size="26" value="#{login.user}"/>
+                                        <p:outputLabel value="#{loginSessionMB.rut}"/>
 
                                     </h:panelGrid>
                                 </p:panel>
 
+                                <p:panel id="listaMed">
+                                    <p:dataTable  id="tabla" value="#{funcionQl.recetaa}" var="med">
+                                                <f:facet name="header">
+                                                        Medicamentos
+                                                    </f:facet>
+                                                <p:column headerText="Nombre">
+                                            <h:outputText value="#{med.nombre}" />
+                                        </p:column>
+                                        <p:column headerText="Forma Farmaceutica">
+                                            <h:outputText value="#{med.forma}" />
+                                        </p:column>
+                                        <p:column headerText="Dosis">
+                                            <h:outputText value="#{med.dosis}" />
+                                        </p:column>
+                                        <p:column headerText="Periodo">
+                                            <h:outputText value="#{med.periodo}" />
+                                        </p:column>
+                                        <p:column headerText="Unidades">
+                                            <h:outputText  value="#{med.unidades}" />
+                                        </p:column>
+                                        <p:column style="width:4%;text-align: center">
+                                            <p:commandButton action="#{funcionQl.eliminarReceta(med.id)}" update="tabla" id="iconOnly"  icon="ui-icon-closethick" title="Icon Only" />
+                                        </p:column>
+
+                                            </p:dataTable>
+                                </p:panel>
 
                                 <p:panel  style="border: #ffffff">
                                     <div align="right">
                                         <h:panelGrid cellpadding="5" >
 
-                                                <br> </br>
-                                                <br> </br>
+                                            <br> </br>
+                                            <br> </br>
 
-                                                <h4 align="right">________________________</h4>
-                                                <h4 align="right">Firma/Timbre Médico</h4>
+                                            <h4 align="right">________________________</h4>
+                                            <h4 align="right">Firma/Timbre Médico</h4>
 
 
 
@@ -175,19 +297,36 @@
 
 
                         </p:panel>
-                        <div id="bottom">
-                            <ui:insert name="bottom"></ui:insert>
-                            <div align="center">
-                                <h:commandButton value="Imprimir" type="button" >
-                                    <p:printer target="datosTodos" />
-                                </h:commandButton>
-                            </div>
+
+                        <div class="noPrintBlock" align="center">
+                            <p:growl id="message" showDetail="true" life="3000"/>
+                            <p:commandButton action="#{funcionQl.validarBotonGuardar()}" update="message"  value="Guardar" icon="ui-icon-check"/>
+                            <p:commandButton onclick="popup.show()" value="Imprimir" icon="ui-icon-print"/>
+
+
+
+                            <p:dialog id="pop" widgetVar="popup" header="Autenticacion" showEffect="fade" hideEffect="explode" >
+                                <h:panelGrid columns="2">
+
+                                    <p:outputLabel for="username" value="Usuario:" />
+                                    <p:inputText value="#{funcionQl.userPrint}"
+                                                 id="username" label="username" />
+
+                                    <p:outputLabel for="password" value="Contraseña" />
+                                    <p:password value="#{funcionQl.passPrint}"
+                                                id="password" label="password" />
+                                    <p:commandButton id="loginButton" value="Aceptar" actionListener="#{funcionQl.comparar()}" update="texto,message" oncomplete="imprimir()"/>
+
+                                    <p:inputText id="texto" type="hidden" value="#{funcionQl.verificar}"/>
+
+                                </h:panelGrid>
+                            </p:dialog>
                         </div>
 
-
-                    </h:form> 
+                    </h:form>
                 </div>
             </div>
+
         </div>
 
     </h:body>

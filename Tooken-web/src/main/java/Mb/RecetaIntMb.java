@@ -7,6 +7,7 @@
 package Mb;
 
 import entity.Clinicalrecords;
+import entity.DosisFf;
 import entity.Farmaco;
 import entity.FfFarmaco;
 import entity.FormaFarmaceutica;
@@ -22,7 +23,9 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import session.ClinicalrecordsFacadeLocal;
+import session.DosisFfFacadeLocal;
 import session.FarmacoFacadeLocal;
 import session.FfFarmacoFacadeLocal;
 import session.FormaFarmaceuticaFacadeLocal;
@@ -35,6 +38,10 @@ import session.PrevisionFacadeLocal;
 @ManagedBean
 @RequestScoped
 public class RecetaIntMb {
+    @Inject
+    LoginSessionMB session;
+    
+    
     @EJB
     private FormaFarmaceuticaFacadeLocal formaFarmaceuticaFacade;
     @EJB
@@ -64,6 +71,14 @@ public class RecetaIntMb {
     String busca;
     String buscaFarmaco;
     List<String> formaFarm;
+    List<String> dosis;
+    String ff;
+    String dosis2;
+    String rpta;
+    String unidades;
+    String periodo;
+    String descripcion;
+    List<datosReceta> recetaa = new ArrayList<datosReceta>();
     
     
     
@@ -92,6 +107,7 @@ public class RecetaIntMb {
          
         return results;
     }
+    
     
     public List<String> complete2(String query) {
         List<String> results = new ArrayList<String>();
@@ -136,7 +152,8 @@ public class RecetaIntMb {
         
         
         
-        //List<FfFarmaco> listaff = ffFarmacoFacade.findId(farmaco.get(0).getFarmacoid().toString());
+        List<FfFarmaco> listaff = ffFarmacoFacade.findFarmacoId(farmaco.get(0));
+        System.out.println("fFfarmaco: "+listaff);
         //System.out.println("fff: "+listaff);
         
         /*System.out.println(listaff.get(0).getFormafarmaceuticaid());
@@ -144,22 +161,52 @@ public class RecetaIntMb {
         
         
         for(int i=0;i<listaff.size();i++){
-            FormaFarmaceutica listaFormFarm=formaFarmaceuticaFacade.find(listaff.get(i).getFormafarmaceuticaid());
+            FormaFarmaceutica listaFormFarm=listaff.get(i).getFormafarmaceuticaid();
             results.add(listaFormFarm.getNombreFf());
-        */
+           
         
-        results.add("parecetamol1");
-        results.add("parecetamol2");
-        results.add("parecetamol3");
-        results.add("parecetamol4");
+        }
+         System.out.println(results);
         
          this.formaFarm=results;
     }
     
+    public void mostrarDosis(){
+        System.out.println("lalalalalalalalalalalalalalalala: "+ getFf());
+        System.out.println("lala: "+ff);
+        List<FormaFarmaceutica> formaFarmaceutica = formaFarmaceuticaFacade.findNombreFF(ff);
+        System.out.println("holaaa:"+formaFarmaceutica.get(0).getFormafarmaceuticaid());
+        //System.out.println(farmaco.getNombrefarmaco());
+        List<String> results = new ArrayList<String>();
+        
+        
+       
+        
+        
+        
+        List<DosisFf> listaDosis = dosisFfFacade.findDosisId(formaFarmaceutica.get(0));
+        System.out.println(listaDosis);
+       // System.out.println("fFfarmaco: "+listaff);
+        //System.out.println("fff: "+listaff);
+        
+        
+        
+       
+        /*for(int i=0;i<listaff.size();i++){
+            FormaFarmaceutica listaFormFarm=listaff.get(i).getFormafarmaceuticaid();
+            results.add(listaFormFarm.getNombreFf());
+           
+        
+        }
+         System.out.println(results);
+        
+         this.formaFarm=results;*/
+         results.add("hola");
+         this.dosis = results;
+    }
+    
     public void mostrarNombre(){
         String rut = getBusca();
-        
-        
         Patients persona = patientsFacade.find(rut);        
         String datoPersona =persona.getFirstName();
         String datoPersona2 =persona.getLastName();
@@ -177,7 +224,7 @@ public class RecetaIntMb {
     
     public void mostrarDomicilio(){
         String rut = getBusca();
-        this.txt=rut;
+        
         System.out.println("ruuuuuuuuuut: "+rut);
      
         Patients persona = patientsFacade.find(rut);
@@ -188,7 +235,7 @@ public class RecetaIntMb {
         }
         System.out.println("direccion: "+persona.getAddress());
         String datoPersona = persona.getAddress();
-       
+       this.txt=rut;
         this.domicilio=datoPersona;
     }
     
@@ -209,6 +256,7 @@ public class RecetaIntMb {
         
       
     }
+   
    
    public void mostrarPrevision(){
         String rut = getBusca();
@@ -289,17 +337,21 @@ public class RecetaIntMb {
     public void setFicha(String ficha) {
         this.ficha = ficha;
     }
+    
+    
 
  
     public void botonAct(){
         
         FacesContext context = FacesContext.getCurrentInstance();
          
-        if(busca=="" || busca==null){
-            context.addMessage(null, new FacesMessage("Successful", "RUN invalido" ));
+        if(busca.equals("") || busca==null){
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "ERROR", "Debe ingresar un RUN obligatoriamente"));
         }
         else{
-        
+           
+            try{
+
             mostrarDomicilio();
 
             mostrarEdad();
@@ -314,7 +366,11 @@ public class RecetaIntMb {
 
 
 
-            context.addMessage(null, new FacesMessage("Successful", "RUN encontrado" ));
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Datos obtenidos"));
+            }
+            catch(NullPointerException e){
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "ERROR", "RUN no encontrado"));
+            }
         }
     }
     
@@ -378,7 +434,71 @@ public class RecetaIntMb {
         this.formaFarm = formaFarm;
     }
 
+    public List<String> getDosis() {
+        return dosis;
+    }
+
+    public void setDosis(List<String> dosis) {
+        this.dosis = dosis;
+    }
+
+    public String getFf() {
+        return ff;
+    }
+
+    public void setFf(String ff) {
+        this.ff = ff;
+    }
+
+    public String getDosis2() {
+        return dosis2;
+    }
+
+    public void setDosis2(String dosis2) {
+        this.dosis2 = dosis2;
+    }
+
+    public String getRpta() {
+        return rpta;
+    }
+
+    public void setRpta(String rpta) {
+        this.rpta = rpta;
+    }
+
+    public String getUnidades() {
+        return unidades;
+    }
+
+    public void setUnidades(String unidades) {
+        this.unidades = unidades;
+    }
+
+    public String getPeriodo() {
+        return periodo;
+    }
+
+    public void setPeriodo(String periodo) {
+        this.periodo = periodo;
+    }
+
+    public List<datosReceta> getRecetaa() {
+        return recetaa;
+    }
+
+    public void setRecetaa(List<datosReceta> recetaa) {
+        this.recetaa = recetaa;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
     
-  
+    
     
 }

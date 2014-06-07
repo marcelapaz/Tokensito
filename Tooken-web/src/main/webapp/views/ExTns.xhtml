@@ -1,0 +1,148 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="./css/default.css"/>
+        <h:outputStylesheet name="./css/cssLayout.css"/>
+        <h:outputStylesheet name="./css/print.css"/>
+        <title></title>
+    </h:head>
+
+    <h:body>
+        <div id="top">
+            <ui:insert name="top"></ui:insert>
+            <!--<h2 align="center" style="font-style: inherit">hola</h2>-->
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <h:outputStylesheet name="./css/default.css"/>
+            <h:outputStylesheet name="./css/cssLayout.css"/>
+            <h:outputStylesheet name="./css/print.css"/>
+            <title>Hosp. Barros Luco</title>
+            <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
+            <link type="text/css" rel="stylesheet" href="#{request.contextPath}/themes/aristo/skin.css" />
+            <link type="text/css" rel="stylesheet" href="#{request.contextPath}/syntaxhighlighter/styles/syntaxhighlighter.css"></link>
+            <style type="text/css">
+
+                body {
+                    background: url(../resources/imagenes/fondo-img.jpg) center fixed no-repeat;
+                    margin: 0;
+                    padding: 0;
+                    font-family: geneva, arial, helvetica, sans-serif;
+                    font-size:80%;
+                }
+
+                .appleIcon {
+                    background: url(../resources/imagenes/apple-icon-16x16.png) no-repeat;
+                    width:16px;
+                    height:16px;
+                }
+
+                .ui-dialog .ui-terminal {
+                    border:0;
+                }
+
+                .ui-dialog.terminalDialog .ui-dialog-content {
+                    padding:0;
+                }
+            </style>
+            <h:form>
+                <p:menubar>
+
+                    <p:menuitem value="Inicio" icon="ui-icon-home" url="../views/inicio.xhtml" />
+
+                    <p:submenu label="Documentos" icon="ui-icon-document">
+                        <p:menuitem value="Receta Externa" url="../views/RecetaExterna.xhtml" icon="" />
+                        <p:menuitem value="Receta Interna" url="../views/RecetaInterna.xhtml" icon="" />
+
+                    </p:submenu>
+                    <p:submenu label="Exámenes" icon="ui-icon-document-b">
+                        <p:menuitem value="Laboratorio" url="../views/ExLaboratorio.xhtml" icon="" />
+                        <p:menuitem value="TNS" url="../views/ExTns.xhtml" icon="" />
+
+                    </p:submenu>
+                    <p:submenu label="Generar alta" icon="ui-icon-document-b">
+                        <p:menuitem value="Contrarreferencia" url="../views/ContraRef.xhtml" icon="" />
+
+                        
+                    </p:submenu>
+                    <f:facet name="options">
+                        <div  style="margin-right:400px ;width: 25%;height: 20%">
+                            <p:clock/>
+                        </div>
+                        <p:outputLabel value="Bienvenido " style="margin-right:10px;font-weight: bold"/>
+                        <p:outputLabel value="Dr. : " style="margin-right:10px;font-weight: bold"/>
+                        <p:outputLabel value="#{loginSessionMB.nombre} #{loginSessionMB.apellido}" style="margin-right:10px"/>
+                        <p:commandButton type="button" value="Cerrar Sesión" icon="ui-icon-extlink" />
+                    </f:facet>
+                </p:menubar>
+
+            </h:form>
+        </div>
+        <div>
+            <div>
+                <div id="content" class="right_content" >
+                    <ui:insert name="content"></ui:insert>
+                    
+
+                    <h:form>
+
+                        <p:panel id="display" style="border: #ffffff" styleClass="printBlock" >
+                            <h3 style="font-weight: bold" align="center">SOLICITUD EXAMEN TNS</h3>
+                            <h4 align="center">Complejo asistencial Barros Luco</h4>
+                            <h4 align="center">Servicio Obstetricia-Ginecologia</h4>
+                            <h4 align="center">Policlinico CAROP</h4>
+                            <br/>
+                            <br/>
+                            <div align="center">
+                                <p:panel header="Datos Examen" style="width: 50%">
+                                <h:panelGrid cellpadding="5" columns="2" style="width:50%;text-align: center">
+                                    
+                                    <h:outputLabel  value="Nombre Medico:  "/>
+                                    <p:inputText id="nombreMed"/>
+
+                                    <h:outputLabel  value="Nombre Paciente:  "/>
+                                    <p:inputText id="nombrePac"/>
+
+                                    <h:outputLabel  value=" N° Ficha: "/>
+                                    <p:inputText id="ficha"/>
+
+                                    <h:outputLabel  value=" Diagnostico: "/>
+                                        <p:inputText id="diagnostico"/>
+
+                                    <h:outputText value="Fecha: "/>
+                                    <p:inputText id="fecha"/>
+                                    
+
+                                </h:panelGrid>
+                                    </p:panel>
+                            </div>
+                            <br/>
+                                    <br/>
+                                    <br/>
+                                    
+                            <div align="right">
+                                <h:outputText style="margin-right: 25%" value=" Firma:_____________________"/>
+                            </div>
+                            <br/>
+                            <br/>
+
+                        </p:panel>
+                        <p:panel styleClass="noPrintBlock">
+                            <div align="center">
+                                <p:commandButton update="display" value="Imprimir" type="button" icon="ui-icon-print" style="display:block;margin-bottom: 20px">
+                                    <p:printer target="display" />
+                                </p:commandButton>
+                            </div>
+                        </p:panel>   
+                    </h:form>
+                </div>
+            </div>
+        </div>
+    </h:body>
+</html>

@@ -22,12 +22,22 @@ import session.ProfessionalsFacadeLocal;
 @ManagedBean
 @SessionScoped
 public class Login {
-    @EJB
     private ProfessionalsFacadeLocal professionalsFacade;
-
-    String user;
-    String contrasena;
     
+    public static String user;
+    public static String contrasena;
+    String apellido;
+    boolean verificacion;
+    
+
+    public boolean isVerificacion() {
+        return verificacion;
+    }
+
+    public void setVerificacion(boolean verificacion) {
+        this.verificacion = verificacion;
+    }
+   
     public Login() {
     }
 
@@ -46,6 +56,16 @@ public class Login {
     public void setContrasena(String contrasena) {
         this.contrasena = contrasena;
     }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+    
+    
     
     public void validacion() throws IOException{
         String usuario=getUser();
@@ -53,10 +73,12 @@ public class Login {
         FacesContext context = FacesContext.getCurrentInstance();
         
         Professionals prof=professionalsFacade.find(usuario);
+        
         if(prof.getFirstName().equals(pass)){
-            
+            context.addMessage(null, new FacesMessage("Welcome" +user+""+apellido, getUser() ));
+            this.apellido = prof.getLastName();
             FacesContext.getCurrentInstance().getExternalContext().redirect("inicio.xhtml");
-            context.addMessage(null, new FacesMessage("Welcome", getUser() ));
+            
             
         }
         else{

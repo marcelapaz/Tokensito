@@ -7,6 +7,7 @@
 package session;
 
 import entity.Farmaco;
+import entity.FfFarmaco;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -34,6 +35,7 @@ public interface FarmacoFacadeLocal {
    
 
     public List<Farmaco> findNombre(String entrada);
+    
 
    
     

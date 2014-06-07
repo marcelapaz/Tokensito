@@ -6,6 +6,8 @@
 
 package session;
 
+import entity.Farmaco;
+import entity.FfFarmaco;
 import entity.FormaFarmaceutica;
 import java.util.List;
 import javax.ejb.Local;
@@ -30,5 +32,9 @@ public interface FormaFarmaceuticaFacadeLocal {
     List<FormaFarmaceutica> findRange(int[] range);
 
     int count();
+    
+     public List<FormaFarmaceutica> findFormId(int remedio);
+     
+     public List<FormaFarmaceutica> findNombreFF(String entrada);
     
 }

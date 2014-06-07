@@ -8,6 +8,7 @@ package session;
 
 import entity.Farmaco;
 import entity.FfFarmaco;
+import static java.lang.Integer.parseInt;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -33,8 +34,15 @@ public class FfFarmacoFacade extends AbstractFacade<FfFarmaco> implements FfFarm
     }
     
     @Override
-    public List<FfFarmaco> findId(String idfarmaco) {
+    public List<FfFarmaco> findId(int idfarmaco) {
         Query q=em.createNamedQuery("FfFarmaco.findByFarmacoId").setParameter("farmacoId", idfarmaco);
         return q.getResultList();
     }
+    
+    @Override
+    public List<FfFarmaco> findFarmacoId(Farmaco remedio) {
+        Query q=em.createNamedQuery("FfFarmaco.findByFarmacoId").setParameter("farmacoId", remedio);
+        return q.getResultList();
+    }
+    
 }

@@ -3,13 +3,36 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package Mb;
 
+import entity.Clinicalrecords;
+import entity.Patients;
+import entity.Prevision;
+import entity.Professionals;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Map;
+import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.ActionEvent;
+import javax.inject.Inject;
+import javax.swing.JOptionPane;
+import session.ClinicalrecordsFacadeLocal;
+import session.FarmacoFacadeLocal;
+import session.FfFarmacoFacadeLocal;
+import session.FormaFarmaceuticaFacadeLocal;
+import session.PatientsFacadeLocal;
+import session.PrevisionFacadeLocal;
+import session.ProfessionalsFacadeLocal;
+import org.primefaces.event.CloseEvent;
 
 /**
  *
@@ -17,25 +40,142 @@ import javax.faces.bean.RequestScoped;
  */
 @ManagedBean(name = "recetaexternaMb")
 @RequestScoped
+
 public class RecetaExternaMb {
+    
+    @Inject
+    LoginSessionMB session;
+    @EJB
+    private FormaFarmaceuticaFacadeLocal formaFarmaceuticaFacade;
+    @EJB
+    private FfFarmacoFacadeLocal ffFarmacoFacade;
+    @EJB
+    private FarmacoFacadeLocal farmacoFacade;   
+    @EJB
+    private PrevisionFacadeLocal previsionFacade;
+    @EJB
+    private ClinicalrecordsFacadeLocal clinicalrecordsFacade;
+    @EJB
+    private PatientsFacadeLocal patientsFacade;
+    @EJB
+    private ProfessionalsFacadeLocal professionalsFacade;
+
+
 
     int ano;
     int mes;
     int dia;
     String nombreDoc;
+    String apellidoDoc;
     String runDoc;
-    String nombrePac;
+    String nombre;
     String runPac;
     String edad;
     String ficha;
+    String text;
+    String busca;
+    String fecha;
+    String txt;
+    String domicilio;
+    String lastMessage;
+    String user;
+    String contrasena;
+    String apellido;
+    String userPrint;
+    String passPrint;
+    String verificar;
+    String prevision;
+
+ 
+   public RecetaExternaMb(){
+       
+   }
     
+    public String getPrevision() {
+        return prevision;
+    }
+
+    public void setPrevision(String prevision) {
+        this.prevision = prevision;
+    }
+   
     
-    public RecetaExternaMb() {
+    public String getVerificar() {
+        return verificar;
+    }
+
+    public void setVerificar(String verificar) {
+        this.verificar = verificar;
+    }
+    
+
+    public String getUserPrint() {
+        return userPrint;
+    }
+
+    public void setUserPrint(String userPrint) {
+        this.userPrint = userPrint;
+    }
+
+    public String getPassPrint() {
+        return passPrint;
+    }
+
+    public void setPassPrint(String passPrint) {
+        this.passPrint = passPrint;
+    }
+
+    public String getLastMessage() {
+        return lastMessage;
+    }
+
+    public void setLastMessage(String lastMessage) {
+        this.lastMessage = lastMessage;
+    }
+
+    public String getDomicilio() {
+        return domicilio;
+    }
+
+    public void setDomicilio(String domicilio) {
+        this.domicilio = domicilio;
+    }
+
+    public String getTxt() {
+        return txt;
+    }
+
+    public void setTxt(String txt) {
+        this.txt = txt;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getBusca() {
+        return busca;
+    }
+
+    public void setBusca(String busca) {
+        this.busca = busca;
+    }
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
     }
 
     public int getAno() {
-        Calendar fecha=new GregorianCalendar();
-        ano=fecha.get(Calendar.YEAR);
+        Calendar fecha = new GregorianCalendar();
+        ano = fecha.get(Calendar.YEAR);
         return ano;
     }
 
@@ -43,9 +183,9 @@ public class RecetaExternaMb {
         this.ano = ano;
     }
 
-    public int getMes(){ 
-        Calendar fecha=new GregorianCalendar();
-        mes=fecha.get(Calendar.MONTH);    
+    public int getMes() {
+        Calendar fecha = new GregorianCalendar();
+        mes = fecha.get(Calendar.MONTH);
         return mes;
     }
 
@@ -54,8 +194,8 @@ public class RecetaExternaMb {
     }
 
     public int getDia() {
-        Calendar fecha=new GregorianCalendar();
-        dia=fecha.get(Calendar.DAY_OF_MONTH);
+        Calendar fecha = new GregorianCalendar();
+        dia = fecha.get(Calendar.DAY_OF_MONTH);
         return dia;
     }
 
@@ -64,7 +204,7 @@ public class RecetaExternaMb {
     }
 
     public String getNombreDoc() {
-        nombreDoc="MarcePaz";
+
         return nombreDoc;
     }
 
@@ -73,7 +213,7 @@ public class RecetaExternaMb {
     }
 
     public String getRunDoc() {
-        runDoc="17488881-7";
+
         return runDoc;
     }
 
@@ -81,17 +221,72 @@ public class RecetaExternaMb {
         this.runDoc = runDoc;
     }
 
-    public String getNombrePac() {
-        nombrePac="Juan Perez";
-        return nombrePac;
+    public LoginSessionMB getSession() {
+        return session;
     }
 
-    public void setNombrePac(String nombrePac) {
-        this.nombrePac = nombrePac;
+    public void setSession(LoginSessionMB session) {
+        this.session = session;
+    }
+
+    public FormaFarmaceuticaFacadeLocal getFormaFarmaceuticaFacade() {
+        return formaFarmaceuticaFacade;
+    }
+
+    public void setFormaFarmaceuticaFacade(FormaFarmaceuticaFacadeLocal formaFarmaceuticaFacade) {
+        this.formaFarmaceuticaFacade = formaFarmaceuticaFacade;
+    }
+
+    public FfFarmacoFacadeLocal getFfFarmacoFacade() {
+        return ffFarmacoFacade;
+    }
+
+    public void setFfFarmacoFacade(FfFarmacoFacadeLocal ffFarmacoFacade) {
+        this.ffFarmacoFacade = ffFarmacoFacade;
+    }
+
+    public FarmacoFacadeLocal getFarmacoFacade() {
+        return farmacoFacade;
+    }
+
+    public void setFarmacoFacade(FarmacoFacadeLocal farmacoFacade) {
+        this.farmacoFacade = farmacoFacade;
+    }
+
+    public PrevisionFacadeLocal getPrevisionFacade() {
+        return previsionFacade;
+    }
+
+    public void setPrevisionFacade(PrevisionFacadeLocal previsionFacade) {
+        this.previsionFacade = previsionFacade;
+    }
+
+    public ClinicalrecordsFacadeLocal getClinicalrecordsFacade() {
+        return clinicalrecordsFacade;
+    }
+
+    public void setClinicalrecordsFacade(ClinicalrecordsFacadeLocal clinicalrecordsFacade) {
+        this.clinicalrecordsFacade = clinicalrecordsFacade;
+    }
+
+    public PatientsFacadeLocal getPatientsFacade() {
+        return patientsFacade;
+    }
+
+    public void setPatientsFacade(PatientsFacadeLocal patientsFacade) {
+        this.patientsFacade = patientsFacade;
+    }
+
+    public ProfessionalsFacadeLocal getProfessionalsFacade() {
+        return professionalsFacade;
+    }
+
+    public void setProfessionalsFacade(ProfessionalsFacadeLocal professionalsFacade) {
+        this.professionalsFacade = professionalsFacade;
     }
 
     public String getRunPac() {
-        runPac="18339446-3";
+
         return runPac;
     }
 
@@ -100,7 +295,7 @@ public class RecetaExternaMb {
     }
 
     public String getEdad() {
-        edad="20";
+
         return edad;
     }
 
@@ -109,12 +304,264 @@ public class RecetaExternaMb {
     }
 
     public String getFicha() {
-        ficha="13";
+
         return ficha;
     }
 
     public void setFicha(String ficha) {
         this.ficha = ficha;
     }
+
+    public String getApellidoDoc() {
+        return apellidoDoc;
+    }
+
+    public void setApellidoDoc(String apellidoDoc) {
+        this.apellidoDoc = apellidoDoc;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public String getContrasena() {
+        return contrasena;
+    }
+
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
     
+
+    public void validacion2() throws IOException {
+        System.out.println("entré :DDDDDDDDDDD");
+
+        String usuario = Login.user;
+        String pass = Login.contrasena;
+        System.out.println(usuario +" "+pass);
+        FacesContext context = FacesContext.getCurrentInstance();
+
+        Professionals prof = professionalsFacade.find(usuario);
+
+        if (prof.getFirstName().equals(pass) && usuario.equalsIgnoreCase(userPrint) && pass.equalsIgnoreCase(passPrint)) {
+            this.apellido = prof.getLastName();
+            FacesContext.getCurrentInstance().getExternalContext();
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Welcome" + user + "" + apellido, getUser()));
+            verificar = "Si";
+            System.out.println("Soy VALIDO!!!!!!!!!! :DDDDDDDDDDD");
+            //this.dispose(); 
+
+        } else {
+            verificar = "No";
+            System.out.println("NO Soy VALIDO!!!!!!!!!! :DDDDDDDDDDD");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("RecetaExterna.xhtml");
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Usuario Invalido", "Verificar usuario o contraseña"));
+        }
+
+    }
+    
+    
+    public void comparar(){
+        System.out.println("entre a comparar"+ session.getRut()+" "+ session.getContrasena());
+        
+        if(session.getRut().equals(userPrint) && session.getContrasena().equals(passPrint)){
+        verificar="Si";
+        
+        
+        }else{
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Usuario Invalido", "Verificar usuario o contraseña"));
+                verificar="No";
+                
+                }
+    
+    
+    }
+
+    public void validacion() throws IOException {
+        System.out.println("entré :DDDDDDDDDDD");
+        String usuario = getUserPrint();
+        String pass = getPassPrint();
+        FacesContext context = FacesContext.getCurrentInstance();
+        //Professionals prof=professionalsFacade.find(usuario);
+
+        //if(prof.getFirstName().equals(pass)){
+        context.addMessage(null, new FacesMessage("Welcome", "asd"));
+            //this.apellido = prof.getLastName();
+        //FacesContext.getCurrentInstance().getExternalContext().redirect("inicio.xhtml");
+
+        //}
+        //else{
+        //context.addMessage(null, new FacesMessage("Usuario Invalido", "asd" ));
+        //}
+    }
+
+    public void truco() {
+        System.out.println(text);
+    }
+
+    public void mostrarDomicilio() {
+        String rut = getBusca();
+        this.txt = rut;
+        System.out.println("ruuuuuuuuuut: " + rut);
+
+        Patients persona = patientsFacade.find(rut);
+        if (persona == null) {
+            System.out.print("persona no encontrada");
+            this.domicilio = "";
+            return;
+        }
+        System.out.println("direccion: " + persona.getAddress());
+        String datoPersona = persona.getAddress();
+
+        this.domicilio = datoPersona;
+    }
+
+    public void mostrarEdad() {
+        String rut = getBusca();
+
+        Patients persona = patientsFacade.find(rut);
+        System.out.println("direccion: " + persona.getDateOfBirth().toString());
+        String datoPersona = persona.getDateOfBirth();
+        String [] lista = datoPersona.split("/");
+        edad = (getAno() - Integer.parseInt(lista[2]))+"";
+        
+    }
+
+    public void mostrarNombre() {
+        String rut = getBusca();
+
+        Patients persona = patientsFacade.find(rut);
+        String datoPersona = persona.getFirstName();
+        String datoPersona2 = persona.getLastName();
+        String datoPersona3 = persona.getLastName2();
+        this.nombre = datoPersona + " " + datoPersona2 + " " + datoPersona3;
+    }
+
+    public void mostrarFecha() {
+
+        Calendar fecha2 = new GregorianCalendar();
+
+        this.fecha = fecha2.get(Calendar.DAY_OF_MONTH) + "/" + (fecha2.get(Calendar.MONTH)+1) + "/" + fecha2.get(Calendar.YEAR);
+    }
+
+    public void mostrarFicha() {
+        String rut = getBusca();
+        List<Patients> lista = patientsFacade.findAll();
+        Patients pasiente = new Patients();
+        System.out.println("shiiiiiit");
+        for (int i = 0; i < lista.size(); i++) {
+            if (rut.equals(lista.get(i).getRut())) {
+                pasiente = lista.get(i);
+            }
+        }
+        List<Clinicalrecords> listaClinical = clinicalrecordsFacade.findRut(pasiente);
+        System.out.println("hoooolaaaaa");
+        System.out.println("ficha: " + listaClinical.get(0).getCrecid().toString());
+        this.ficha = listaClinical.get(0).getCrecid().toString();
+
+    }
+
+    public void botonAct() {
+
+        FacesContext context = FacesContext.getCurrentInstance();
+        System.out.println("entre boton");
+
+        if ("".equals(busca) || busca == null) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "ERROR", "Debe ingresar un RUN obligatoriamente"));
+        } else {
+            try {
+                System.out.println("rut valido");
+                mostrarDomicilio();
+                mostrarEdad();
+                mostrarFecha();
+                mostrarNombre();
+                mostrarFicha();
+                mostrarPrevision();
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Datos obtenidos"));
+            } catch (NullPointerException e) {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "ERROR", "RUN no encontrado"));
+            }
+
+        }
+
+    }
+
+    public List<String> complete(String query) {
+        List<String> results = new ArrayList<String>();
+        List<Patients> lista = patientsFacade.findAll();
+
+        for (int i = 0; i < lista.size(); i++) {
+            String rut = lista.get(i).getRut();
+
+            if (rut.startsWith(query)) {
+                System.out.println(rut);
+                results.add(rut);
+            }
+
+        }
+
+        return results;
+    }
+
+    public void getSomeValue() throws AbortProcessingException {
+        FacesContext context = FacesContext.getCurrentInstance();
+        Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
+
+        //Whatever you need to do
+        String message
+                = "The Result you wish to display";
+
+        requestMap.put("lastMessage", message);
+    }
+
+    private void dispose() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void destroyWorld() {
+        System.out.println("entré a destroy!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "ERROR", "RUN no encontrado"));
+    }
+
+    public void mostrarPrevision(){
+        String rut = getBusca();
+        List<Patients> lista = patientsFacade.findAll(); 
+        Patients pasiente=new Patients();
+        Prevision prev = new Prevision();
+        for (int i = 0; i < lista.size(); i++) {
+            if(rut.equals(lista.get(i).getRut())){
+                pasiente = lista.get(i);
+                prev = pasiente.getPrevisionid();
+}
+        }
+      //  List<Prevision> listaPrevision= previsionFacade.findID(pasiente);
+     
+        this.prevision=prev.getType();
+       
+        
+      
+    }
+
 }

@@ -32,5 +32,6 @@ public interface FfFarmacoFacadeLocal {
 
     int count();
     
-    public List<FfFarmaco> findId(String idfarmaco);
+    public List<FfFarmaco> findId(int idfarmaco);
+    public List<FfFarmaco> findFarmacoId(Farmaco remedio);
 }
