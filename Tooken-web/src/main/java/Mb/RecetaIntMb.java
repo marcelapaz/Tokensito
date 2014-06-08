@@ -78,6 +78,7 @@ public class RecetaIntMb {
     String unidades;
     String periodo;
     String descripcion;
+    String fechaNac;
     List<datosReceta> recetaa = new ArrayList<datosReceta>();
     
     
@@ -276,6 +277,13 @@ public class RecetaIntMb {
         
       
     }
+   
+    /*public void mostrarFechaNac(){
+        String rut = getBusca();
+        Patients persona = patientsFacade.find(rut);
+        System.out.println("direccion: " + persona.getDateOfBirth().toString());
+        fechaNac = persona.getDateOfBirth();
+    }*/
    
     
 

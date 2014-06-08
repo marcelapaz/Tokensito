@@ -85,12 +85,22 @@ public class RecetaExternaMb {
     String passPrint;
     String verificar;
     String prevision;
+    String fechaNac;
 
  
    public RecetaExternaMb(){
        
    }
+
+    public String getFechaNac() {
+        return fechaNac;
+    }
+
+    public void setFechaNac(String fechaNac) {
+        this.fechaNac = fechaNac;
+    }
     
+   
     public String getPrevision() {
         return prevision;
     }
@@ -446,6 +456,13 @@ public class RecetaExternaMb {
         String [] lista = datoPersona.split("/");
         edad = (getAno() - Integer.parseInt(lista[2]))+"";
         
+    }
+    
+    public void mostrarFechaNac(){
+        String rut = getBusca();
+        Patients persona = patientsFacade.find(rut);
+        System.out.println("direccion: " + persona.getDateOfBirth().toString());
+        fechaNac = persona.getDateOfBirth();
     }
 
     public void mostrarNombre() {
