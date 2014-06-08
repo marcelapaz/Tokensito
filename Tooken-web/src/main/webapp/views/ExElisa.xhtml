@@ -65,6 +65,7 @@
                         <p:menuitem value="Laboratorio" url="../views/ExLaboratorio.xhtml" icon="" />
                         <p:menuitem value="TNS" url="../views/ExTns.xhtml" icon="" />
                         <p:menuitem value="ELISA" url="../views/ExElisa.xhtml" icon="" />
+                        <p:menuitem value="Radiológico" url="../views/ExRadiologico.xhtml" icon="" />
 
                     </p:submenu>
                     <p:submenu label="Generar alta" icon="ui-icon-document-b">
@@ -130,7 +131,9 @@
 
                                         </p:autoComplete>
 
-                                        <p:commandButton action="#{recetaIntMb.botonAct()}" update="outRun,outNombre,outEdad,outFicha,outDomicilio,outTipo,outFecha,messages" id="iconSearch"  icon="ui-icon-search" title="Icon Search" />
+                                        <p:commandButton action="#{recetaIntMb.botonAct()}" update="outRun,outNombre,outEdad,
+                                                         outSexo,outDomicilio,outFecha,outEstablecimiento,outServicio,outSala,
+                                                         outFicha,messages" id="iconSearch"  icon="ui-icon-search" title="Icon Search" />
                                     </h:panelGrid>
                                 </div>
                             </p:panel>
@@ -146,28 +149,34 @@
                                     <p:panelGrid columns="4" style="width: 100%;text-align: left">
 
 
-                                        <h:outputLabel  value="R.U.N paciente: "/>
+                                        <h:outputLabel  style="font-weight: bold" value="R.U.N paciente: "/>
                                         <p:outputLabel  id="outRun" value="#{recetaIntMb.txt}"/>
 
-                                        <h:outputLabel  value="Nombre paciente: "/>
+                                        <h:outputLabel  style="font-weight: bold" value="Nombre paciente: "/>
                                         <p:outputLabel id="outNombre" value="#{recetaIntMb.nombre}"/>
 
-                                        <h:outputLabel  value="Fecha de nacimiento: "/>
-                                        <p:outputLabel id="outTipo" value="#{recetaIntMb.edad}"/>
+                                        <h:outputLabel  style="font-weight: bold" value="Fecha de nacimiento: "/>
+                                        <p:outputLabel id="outEdad" value="#{recetaIntMb.edad}"/>
 
-                                        <h:outputLabel  for="outEdad" value="Edad: "/>
-                                        <p:outputLabel id="outEdad"  value="#{recetaIntMb.edad}"/>
+                                        <h:outputLabel  style="font-weight: bold" value="Sexo: "/>
+                                        <p:outputLabel id="outSexo" value="-"/>
 
-                                        <h:outputLabel  value="Sexo: "/>
-                                        <p:outputLabel id="outSexo" value=""/>
-
-                                        <h:outputLabel  value="Domicilio: "/>
+                                        <h:outputLabel  style="font-weight: bold" value="Domicilio: "/>
                                         <p:outputLabel id="outDomicilio" value="#{recetaIntMb.domicilio}"/>
 
-                                        <h:outputLabel  value="Fecha: "/>
+                                        <h:outputLabel  style="font-weight: bold" value="Fecha: "/>
                                         <p:outputLabel id="outFecha" value="#{recetaIntMb.fecha}"/>
+                                        
+                                        <h:outputLabel  style="font-weight: bold" value="Establecimiento: "/>
+                                        <p:outputLabel id="outEstablecimiento" value="-"/>
+                                        
+                                        <h:outputLabel  style="font-weight: bold" value="Servicio: "/>
+                                        <p:outputLabel id="outServicio" value="-"/>
+                                        
+                                        <h:outputLabel  style="font-weight: bold" value="Sala: "/>
+                                        <p:outputLabel id="outSala" value="-"/>
 
-                                        <h:outputLabel  value="N° ficha: "/>
+                                        <h:outputLabel  style="font-weight: bold" value="N° ficha: "/>
                                         <p:outputLabel id="outFicha" value="#{recetaIntMb.ficha}"/>
 
                                     </p:panelGrid>
@@ -220,6 +229,7 @@
                         </p:panel>
 
                         <div class="noPrintBlock">
+                            <p:commandButton action="#{funcionQl.validarBotonGuardar()}" update="message"  value="Guardar" icon="ui-icon-check"/>
                             <p:commandButton type="button" onclick="popup.show()" value="Imprimir" icon="ui-icon-print"  />
                             <p:growl id="message" showDetail="true" life="2000"/>
                             <p:dialog widgetVar="popup" header="Autenticacion" showEffect="fade" hideEffect="explode" >
