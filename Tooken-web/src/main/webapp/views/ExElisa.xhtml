@@ -103,25 +103,46 @@
 
                 <div class="printBlock" style="width: 100%" align="center">
                     <h:form id="form1">    
-                        <p:panel styleClass="printBlock" id="panelGeneral" style="border: #ffffff">
+                        <p:panel id="panelGeneral" style="border: #ffffff" styleClass="printBlock">
                             <p:growl id="messages" showDetail="true" life="800"/>
 
-                            <p:panel id="datoshospital" styleClass="printBlock">
-                                <p:panel styleClass="printBlock" style="width: 100%,text-align: center" >
-                                <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
-                                    <h3 style="font-weight: bold" align="center">SOLICITUD EXAMENES MICROBIOLÓGICOS</h3>
-                                    <h4 align="center">PRESUNTIVO NO CONFIRMATORIO (ELISA)</h4>
-                                    
-                                    <!--<p:selectOneRadio id="console" value="">
-                                        <f:selectItem itemLabel="VIH" itemValue="VIH" />
-                                        <f:selectItem itemLabel="HBs ag" itemValue="HBs ag" />
-                                        <f:selectItem itemLabel="HVC" itemValue="HVC" />
-                                    </p:selectOneRadio>-->
-                                </h:panelGrid>
-                                    </p:panel>
+                            <p:panel id="datoshospital" style="width: 100%;text-align: center">
+                                <div align="center">
+
+                                    <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+
+                                        <h3 style="font-weight: bold" align="center">SOLICITUD EXAMENES MICROBIOLÓGICOS</h3>
+                                        <h4 style="font-weight: bold" align="center">PRESUNTIVO NO CONFIRMATORIO (ELISA)</h4>
+
+                                    </h:panelGrid>
+                                    <h:panelGrid columns="2">
+                                        <h:outputText value="Tipo:" />
+                                        <h:outputText id="display" value="#{selectOneView.option}" style="font-weight: bold" />
+                                    </h:panelGrid>
+                                </div>
+                            </p:panel>   
+
+
+                            <p:panel styleClass="noPrintBlock" id="radioo" style="width: 100%;text-align: center">
+                                <div align="center">
+                                    <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="5">
+                                        <h:outputText value="Tipo Examen:" />
+                                        <p:selectOneRadio value="#{selectOneView.option}">
+                                            <f:selectItem itemLabel="VIH" itemValue="VIH" />
+                                            <f:selectItem itemLabel="HBs ag" itemValue="HBs ag" />
+                                            <f:selectItem itemLabel="HVC" itemValue="HVC" />
+                                        </p:selectOneRadio>
+
+                                        <p:commandButton update="display" icon="ui-icon-plusthick" />
+                                        <p:spacer />
+
+                                    </h:panelGrid>                                                                              
+                                </div>
                             </p:panel>
 
-                            <p:panel id="buscador" styleClass="noPrintBlock">
+
+
+                            <p:panel id="buscador" styleClass="noPrintBlock" style="width: 100%;text-align: center">
                                 <div  align="center">
                                     <h:panelGrid columns="3" cellpadding="5">
 
@@ -141,13 +162,9 @@
                             <p:panel id="datosTodos" style="width: 100%;text-align: center">
 
                                 <p:panel id="datospaciente" header="Datos paciente">
-
-
-
                                     <h:outputLabel  style="font-weight: bold" />
                                     <br/>
                                     <p:panelGrid columns="4" style="width: 100%;text-align: left">
-
 
                                         <h:outputLabel  style="font-weight: bold" value="R.U.N paciente: "/>
                                         <p:outputLabel  id="outRun" value="#{recetaIntMb.txt}"/>
@@ -164,20 +181,20 @@
                                         <h:outputLabel  style="font-weight: bold" value="Domicilio: "/>
                                         <p:outputLabel id="outDomicilio" value="#{recetaIntMb.domicilio}"/>
 
-                                        <h:outputLabel  style="font-weight: bold" value="Fecha: "/>
-                                        <p:outputLabel id="outFecha" value="#{recetaIntMb.fecha}"/>
-                                        
                                         <h:outputLabel  style="font-weight: bold" value="Establecimiento: "/>
                                         <p:outputLabel id="outEstablecimiento" value="-"/>
-                                        
+
                                         <h:outputLabel  style="font-weight: bold" value="Servicio: "/>
                                         <p:outputLabel id="outServicio" value="-"/>
-                                        
+
                                         <h:outputLabel  style="font-weight: bold" value="Sala: "/>
                                         <p:outputLabel id="outSala" value="-"/>
 
                                         <h:outputLabel  style="font-weight: bold" value="N° ficha: "/>
                                         <p:outputLabel id="outFicha" value="#{recetaIntMb.ficha}"/>
+
+                                        <h:outputLabel  style="font-weight: bold" value="Fecha: "/>
+                                        <p:outputLabel id="outFecha" value="#{recetaIntMb.fecha}"/>
 
                                     </p:panelGrid>
 
@@ -187,40 +204,34 @@
 
                                 <p:panel id="diagnostic" style="width: 100%,text-align: center">
                                     <div align="left">
-                                        <h:panelGrid  columns="2" cellpadding="5">
+                                        <br/>
+                                        <h:panelGrid  columns="2" cellpadding="5" style="width: 100%,text-align: center">
                                             <h:outputLabel  value="Diagnóstico clínico: "/>
-                                            <p:inputText></p:inputText>
+                                            <p:inputText size="40"/>
 
                                             <h:outputLabel value="Conducta de riesgo:"/>
-                                            <p:inputText></p:inputText>
+                                            <p:inputText size="40"/>
 
                                         </h:panelGrid>
                                         <br/>
                                         <h:panelGrid columns="2" cellpadding="5">
-                                            <h:outputLabel value="Nombre responsable toma de muestra:__________________________________"/>
+                                            <h:outputLabel value="Nombre responsable toma de muestra: _____________________________________________________"/>
                                         </h:panelGrid>
-
                                     </div>
+                                    <div align="right">
+                                        <h:panelGrid cellpadding="5" style="text-align: right">
+                                            <br> </br>
+                                            <br> </br>
+                                            <h5 align="right">________________________</h5>
+                                            <h5 align="right">Firma/Timbre Médico</h5>
+                                        </h:panelGrid>
+                                    </div>
+
+
                                 </p:panel>
 
-
-
-                                <p:panel  style="border: #ffffff" styleClass="printBlock">
-                                    <div align="right">
-                                        <h:panelGrid cellpadding="5" >
-
-                                            <br> </br>
-                                            <br> </br>
-
-                                            <h4 align="right">________________________</h4>
-                                            <h4 align="right">Firma/Timbre Médico</h4>
-
-
-
-
-                                        </h:panelGrid>
-
-                                    </div>
+                                <p:panel>
+                                    <h4 style="font-weight: bold">NOTA: TÉCNICA ELISA NO HACE DIAGNÓSTICO, REQUIERE TÉCNICAS DE CONFIRMACIÓN</h4>
                                 </p:panel>
                             </p:panel>
 
