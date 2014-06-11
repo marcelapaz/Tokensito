@@ -63,14 +63,16 @@
                     <p:submenu label="Exámenes" icon="ui-icon-document-b">
                         <p:menuitem value="Laboratorio" url="../views/ExLaboratorio.xhtml" icon="" />
                         <p:menuitem value="TNS" url="../views/ExTns.xhtml" icon="" />
+                        <p:menuitem value="Microbiologico" url="../views/ExMicrobiologico.xhtml" icon="" />
                         <p:menuitem value="ELISA" url="../views/ExElisa.xhtml" icon="" />
+                        <p:menuitem value="Glicemia" url="../views/ExGlicemia.xhtml" icon="" />
                         <p:menuitem value="Radiológico" url="../views/ExRadiologico.xhtml" icon="" />
 
                     </p:submenu>
                     <p:submenu label="Generar alta" icon="ui-icon-document-b">
                         <p:menuitem value="Contrarreferencia" url="../views/ContraRef.xhtml" icon="" />
 
-                        
+
                     </p:submenu>
                     <f:facet name="options">
                         <div  style="margin-right:400px ;width: 25%;height: 20%">
@@ -91,7 +93,7 @@
                     <ui:insert name="content"></ui:insert>
 
                     <h:form>
-                        <p:panel id="display" style="border: #ffffff" >
+                        <p:panel style="border: #ffffff" >
                             <h3 style="font-weight: bold" align="center">CONTRARREFERENCIA</h3>
                             <h4 align="center">Servicio de Salud Metropolitano Sur</h4>
                             <h4 align="center">Complejo Asistencial Barros Luco</h4>
@@ -101,13 +103,13 @@
 
                             <h:panelGrid columns="4" cellpadding="5">
                                 <h:outputLabel  value="De:"/>
-                                <p:inputText id="de" size="81"/>
+                                <p:inputText id="de" value="#{contraRefMb.de}" size="81"/>
                                 <h:outputLabel  value=" Fecha: "/>
-                                <p:inputText id="fecha" size="30"/>
+                                <p:outputLabel value="#{pacienteMb.fecha}"/>
                             </h:panelGrid>
                             <h:panelGrid columns="2" cellpadding="5">
                                 <h:outputLabel  value="A: &nbsp;"/>
-                                <p:inputText id="a" size="129"/>
+                                <p:inputText id="a" value="#{contraRefMb.a}" size="129"/>
                             </h:panelGrid>
                             <br/>
                             <h:panelGrid columns="1" cellpadding="5">
@@ -117,54 +119,117 @@
                             <h:panelGrid columns="2" cellpadding="5">
 
                                 <p:outputLabel value="Nombre: &nbsp;" />
-                                <p:inputText id="nombre" size="123"/>
+                                <p:outputLabel value="#{pacienteMb.nombrePac}"/>
                             </h:panelGrid>
                             <h:panelGrid columns="6" cellpadding="5">
                                 <h:outputLabel  value="R.U.N.:&nbsp;&nbsp;&nbsp;&nbsp; "/>
-                                <p:inputText id="run" size="40"/>
+                                <p:outputLabel value="#{pacienteMb.txt}"/>
                                 <h:outputLabel  value=" Edad:"/>
-                                <p:inputText id="edad" size="20"/>
-                                <p:outputLabel value=" Telefonos: "/>
-                                <p:inputText id="telefono" size="24" />
+                                <p:outputLabel value="#{pacienteMb.edad}"/>
+                                <p:outputLabel value=" Telefono: "/>
+                                <p:inputText id="telefono" value="#{contraRefMb.telefono}" size="24" />
                             </h:panelGrid>
                             <h:panelGrid columns="4" cellpadding="5">
                                 <h:outputLabel  value="Dirección: "/>
-                                <p:inputText id="direccion" size="40"/>
+                                <p:outputLabel value="#{pacienteMb.domicilio}"/>
                                 <p:outputLabel  value=" Consultorios: "/>
-                                <p:inputText id="consultorio" size="58"/>
+                                <p:inputText id="consultorio" value="#{contraRefMb.consultorios}" size="58"/>
                             </h:panelGrid>
                             <h:panelGrid columns="2" cellpadding="5">
                                 <h:outputLabel  value="DIAGNÓSTICO Y CUADRO CLÍNICO " style="font-weight: bold"    />
-                                <p:inputTextarea  id="diagnostico" autoResize="true" style="width: 400%;height: 100px"  />
+                                <p:inputTextarea  id="diagnostico" value="#{contraRefMb.diagnostico}" autoResize="true" style="width: 400%;height: 100px"  />
 
 
                                 <h:outputLabel  value="TRATAMIENTO ACTUAL: " style="font-weight: bold" />
-                                <p:inputTextarea id="tratamiento" autoResize="true" style="width: 400%;height: 100px"  />                            
+                                <p:inputTextarea id="tratamiento" value="#{contraRefMb.tratamiento}" autoResize="true" style="width: 400%;height: 100px"  />                            
 
                                 <h:outputLabel  value="PLAN DE CONTROL Y SEGUIMIENTO: " style="font-weight: bold"/>
-                                <p:inputTextarea id="seguimiento" autoResize="true" style="width: 400%;height: 100px" />
+                                <p:inputTextarea id="seguimiento" value="#{contraRefMb.plan}" autoResize="true" style="width: 400%;height: 100px" />
                             </h:panelGrid>
 
                             <h:panelGrid columns="3" cellpadding="5">
                                 <p:outputLabel  value="Nombre del profesional: "/>
-                                <p:inputText id="nompreDoc" size="49" />
-                                
+                                <p:outputLabel value="#{loginSessionMB.nombre} #{loginSessionMB.apellido}"/>
+
                             </h:panelGrid>
                             <br/>
-                            <div align="right">
-                                <p:outputLabel  value="Firma:________________________________________ " />
-                            </div>
-                            <br/>
                         </p:panel>
-                        <p:panel>
-                            <div>
-                                <p:growl id="message" showDetail="true" life="2000"/>
-                                <p:commandButton action="#{funcionQl.validarBotonGuardar()}" update="message"  value="Guardar" icon="ui-icon-check"/>
+                        <div align="center">
+                            <p:commandButton value="Guardar" update="display" oncomplete="PF('dlg').show()" icon="ui-icon-check"/>
+                             </div>
+                        <p:dialog header="Values" modal="true" showEffect="clip" widgetVar="dlg" height="500" maximizable="true" resizable="false" closeOnEscape="true" draggable="false"  >
+                            <div align="center">
                                 <p:commandButton update="display" value="Imprimir" type="button" icon="ui-icon-print" style="display:block;margin-bottom: 20px">
                                     <p:printer target="display" />
                                 </p:commandButton>
                             </div>
-                        </p:panel>
+                            <p:outputPanel id="display"  >
+                                <h:form>
+
+                                    <h3 style="font-weight: bold" align="center">CONTRARREFERENCIA</h3>
+                                    <h4 align="center">Servicio de Salud Metropolitano Sur</h4>
+                                    <h4 align="center">Complejo Asistencial Barros Luco</h4>
+                                    <h4 align="center">Dirección área asistencial</h4>
+                                    <h4 align="center">Unidad de red CABL</h4>
+                                        <h:panelGrid columns="4" cellpadding="5">
+                                            <p:outputLabel  value="De:"/>
+                                            <p:outputLabel value="#{contraRefMb.de}"/>
+                                            <p:outputLabel  value=" Fecha: "/>
+                                            <p:outputLabel value="#{pacienteMb.fecha}"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="2" cellpadding="5">
+                                            <p:outputLabel  value="A: &nbsp;"/>
+                                            <p:outputLabel value="#{contraRefMb.a}" />
+                                        </h:panelGrid>
+                                        <br/>
+                                        <h:panelGrid columns="1" cellpadding="5">
+                                            <h:outputLabel  value="IDENTIFICACIÓN DEL PACIENTE O USUARIO " style="font-weight: bold"/>
+                                        </h:panelGrid>
+                                        <br/>
+                                        <h:panelGrid columns="2" cellpadding="5">
+
+                                            <p:outputLabel value="Nombre: &nbsp;" />
+                                            <p:outputLabel value="#{pacienteMb.nombrePac}"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="6" cellpadding="5">
+                                            <h:outputLabel  value="R.U.N.:&nbsp;&nbsp;&nbsp;&nbsp; "/>
+                                            <p:outputLabel value="#{pacienteMb.txt}"/>
+                                            <h:outputLabel  value=" Edad:"/>
+                                            <p:outputLabel value="#{pacienteMb.edad}"/>
+                                            <p:outputLabel value=" Telefono: "/>
+                                            <p:outputLabel value="#{contraRefMb.telefono}" />
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="4" cellpadding="5">
+                                            <h:outputLabel  value="Dirección: "/>
+                                            <p:outputLabel value="#{pacienteMb.domicilio}"/>
+                                            <p:outputLabel  value=" Consultorios: "/>
+                                            <p:outputLabel value="#{contraRefMb.consultorios}"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="2" cellpadding="5">
+                                            <h:outputLabel  value="DIAGNÓSTICO Y CUADRO CLÍNICO " style="font-weight: bold"    />
+                                            <p:outputLabel value="#{contraRefMb.diagnostico}" />
+
+
+                                            <h:outputLabel  value="TRATAMIENTO ACTUAL: " style="font-weight: bold" />
+                                            <p:outputLabel value="#{contraRefMb.tratamiento}" />                            
+
+                                            <h:outputLabel  value="PLAN DE CONTROL Y SEGUIMIENTO: " style="font-weight: bold"/>
+                                            <p:outputLabel value="#{contraRefMb.plan}" />
+                                        </h:panelGrid>
+
+                                        <h:panelGrid columns="3" cellpadding="5">
+                                            <p:outputLabel  value="Nombre del profesional: "/>
+                                            <p:outputLabel value="#{loginSessionMB.nombre} #{loginSessionMB.apellido}"/>
+
+                                        </h:panelGrid>
+                                        <br/>
+                                        <div align="right">
+                                            <p:outputLabel  value="Firma:________________________________________ " />
+                                        </div>
+                                </h:form>
+
+                            </p:outputPanel>
+                        </p:dialog>
                     </h:form>
 
                 </div>

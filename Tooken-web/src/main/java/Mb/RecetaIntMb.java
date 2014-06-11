@@ -368,8 +368,11 @@ public class RecetaIntMb {
             mostrarNombre();
 
             mostrarFicha();
-
+            session.setFicha(Integer.parseInt(ficha));
+            session.setRutPaciente(busca);
             mostrarPrevision();
+            
+            
 
 
 

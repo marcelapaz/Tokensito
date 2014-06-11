@@ -17,6 +17,7 @@ public class DialogView {
     private String[] selectedHorm;
     private String[] selectedInmun;
     private String[] selectedVen;
+    private List<String> selectedExamen;
     private List<String> exam;
     private List<String> examCito;
     private List<String> examOrin;
@@ -38,7 +39,8 @@ public class DialogView {
         examHorm = new ArrayList<String>();
         examInmun = new ArrayList<String>();
         examVen = new ArrayList<String>();
-        
+        selectedExamen = new ArrayList<String>();
+
         exam.add("Glicemia");
         exam.add("Nitrógeno ureico");
         exam.add("Creatina");
@@ -153,6 +155,77 @@ public class DialogView {
         examVen.add("MHA-TP");
 
     }
+    public boolean mostrarOtros() {
+        try{
+            return description.length()!=0;
+        }catch(Exception ex){
+            return false;
+        }
+    }
+    public boolean mostrarVen() {
+        try{
+            return selectedVen.length!=0;
+        }catch(Exception ex){
+            return false;
+        }
+    }
+    public boolean mostrarOrina() {
+        try{
+            return selectedOrina.length!=0;
+        }catch(Exception ex){
+            return false;
+        }
+    }
+    public boolean mostrarMarc() {
+        try{
+            return selectedMarc.length!=0;
+        }catch(Exception ex){
+            return false;
+        }
+    }
+    public boolean mostrarInmun() {
+        try{
+            return selectedInmun.length!=0;
+        }catch(Exception ex){
+            return false;
+        }
+    }
+    public boolean mostrarHorm() {
+        try{
+            return selectedHorm.length!=0;
+        }catch(Exception ex){
+            return false;
+        }
+    }
+    public boolean mostrarHemat() {
+        try{
+            return selectedHemat.length!=0;
+        }catch(Exception ex){
+            return false;
+        }
+    }
+    public boolean mostrarCito() {
+        try{
+            return selectedCito.length!=0;
+        }catch(Exception ex){
+            return false;
+        }
+    }
+    public boolean mostrarBio() {
+        try{
+            return selectedBio.length!=0;
+        }catch(Exception ex){
+            return false;
+        }
+    }
+
+    public List<String> getSelectedExamen() {
+        return selectedExamen;
+    }
+
+    public void setSelectedExamen(List<String> selectedExamen) {
+        this.selectedExamen = selectedExamen;
+    }
 
     public String getVdrl() {
         return vdrl;
@@ -161,7 +234,6 @@ public class DialogView {
     public void setVdrl(String vdrl) {
         this.vdrl = vdrl;
     }
-    
 
     public String getDescription() {
         return description;
@@ -176,12 +248,7 @@ public class DialogView {
     }
 
     public void setSelectedBio(String[] selectedBio) {
-        String[] selectedBio1 = new String[selectedBio.length + 1];
-        selectedBio1[0] = "BIOQUIMICA:";
-        for (int i = 1; i < selectedBio.length + 1; i++) {
-            selectedBio1[i] = selectedBio[i - 1];
-        }
-        this.selectedBio = selectedBio1;
+        this.selectedBio = selectedBio;
     }
 
     public String[] getSelectedCito() {
@@ -189,12 +256,7 @@ public class DialogView {
     }
 
     public void setSelectedCito(String[] selectedCito) {
-        String[] selectedCito1 = new String[selectedCito.length + 1];
-        selectedCito1[0] = "CITOQUIMICO DE LIQUIDO BIOLOGICO:";
-        for (int i = 1; i < selectedCito.length + 1; i++) {
-            selectedCito1[i] = selectedCito[i - 1];
-        }
-        this.selectedCito = selectedCito1;
+        this.selectedCito = selectedCito;
     }
 
     public String[] getSelectedOrina() {
@@ -202,12 +264,7 @@ public class DialogView {
     }
 
     public void setSelectedOrina(String[] selectedOrina) {
-        String[] selectedOrina1 = new String[selectedOrina.length + 1];
-        selectedOrina1[0] = "ORINA:";
-        for (int i = 1; i < selectedOrina.length + 1; i++) {
-            selectedOrina1[i] = selectedOrina[i - 1];
-        }
-        this.selectedOrina = selectedOrina1;
+        this.selectedOrina = selectedOrina;
     }
 
     public String[] getSelectedMarc() {
@@ -215,12 +272,7 @@ public class DialogView {
     }
 
     public void setSelectedMarc(String[] selectedMarc) {
-        String[] selectedMarc1 = new String[selectedMarc.length + 1];
-        selectedMarc1[0] = "MARCADORES TUMORALES:";
-        for (int i = 1; i < selectedMarc.length + 1; i++) {
-            selectedMarc1[i] = selectedMarc[i - 1];
-        }
-        this.selectedMarc = selectedMarc1;
+        this.selectedMarc = selectedMarc;
     }
 
     public String[] getSelectedHemat() {
@@ -228,12 +280,7 @@ public class DialogView {
     }
 
     public void setSelectedHemat(String[] selectedHemat) {
-        String[] selectedHemat1 = new String[selectedHemat.length + 1];
-        selectedHemat1[0] = "HEMATOLOGIA:";
-        for (int i = 1; i < selectedHemat.length + 1; i++) {
-            selectedHemat1[i] = selectedHemat[i - 1];
-        }
-        this.selectedHemat = selectedHemat1;
+        this.selectedHemat = selectedHemat;
     }
 
     public String[] getSelectedHorm() {
@@ -241,12 +288,7 @@ public class DialogView {
     }
 
     public void setSelectedHorm(String[] selectedHorm) {
-        String[] selectedHorm1 = new String[selectedHorm.length + 1];
-        selectedHorm1[0] = "HORMONAS:";
-        for (int i = 1; i < selectedHorm.length + 1; i++) {
-            selectedHorm1[i] = selectedHorm[i - 1];
-        }
-        this.selectedHorm = selectedHorm1;
+        this.selectedHorm = selectedHorm;
     }
 
     public String[] getSelectedInmun() {
@@ -254,12 +296,7 @@ public class DialogView {
     }
 
     public void setSelectedInmun(String[] selectedInmun) {
-        String[] selectedInmun1 = new String[selectedInmun.length + 1];
-        selectedInmun1[0] = "INMUNOLOGIA:";
-        for (int i = 1; i < selectedInmun.length + 1; i++) {
-            selectedInmun1[i] = selectedInmun[i - 1];
-        }
-        this.selectedInmun = selectedInmun1;
+        this.selectedInmun = selectedInmun;
     }
 
     public String[] getSelectedVen() {
@@ -267,12 +304,7 @@ public class DialogView {
     }
 
     public void setSelectedVen(String[] selectedVen) {
-        String[] selectedVen1 = new String[selectedVen.length + 1];
-        selectedVen1[0] = "VENEREAS:";
-        for (int i = 1; i < selectedVen.length + 1; i++) {
-            selectedVen1[i] = selectedVen[i - 1];
-        }
-        this.selectedVen = selectedVen1;
+        this.selectedVen = selectedVen;
     }
 
     public List<String> getExam() {

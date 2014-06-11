@@ -13,6 +13,8 @@ import entity.FfFarmaco;
 import entity.FormaFarmaceutica;
 import entity.Prescription;
 import entity.Professionals;
+import entity.RecetaExterna;
+import entity.RexternaFarmaco;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -32,6 +34,8 @@ import session.FfFarmacoFacadeLocal;
 import session.FormaFarmaceuticaFacadeLocal;
 import session.PrescriptionFacadeLocal;
 import session.ProfessionalsFacadeLocal;
+import session.RecetaExternaFacadeLocal;
+import session.RexternaFarmacoFacadeLocal;
 
 /**
  *
@@ -43,8 +47,12 @@ public class funcionQl {
 
     @Inject
     LoginSessionMB session;
-    
 
+    @EJB
+    private RexternaFarmacoFacadeLocal rexternaFarmacoFacade;
+
+    @EJB
+    private RecetaExternaFacadeLocal recetaExternaFacade;
     @EJB
     private ClinicalrecordsFacadeLocal clinicalrecordsFacade;
     @EJB
@@ -76,6 +84,7 @@ public class funcionQl {
     String userPrint;
     String passPrint;
     String busca;
+    String descripcion;
     public static int validacion;
 
     public funcionQl() {
@@ -99,18 +108,16 @@ public class funcionQl {
     }
 
     public void mostrarForma() {
-        
+
         List<Farmaco> farmaco = farmacoFacade.findNombre(buscaFarmaco);
 
         //System.out.println(farmaco.getNombrefarmaco());
         List<String> results = new ArrayList<String>();
         List<FormaFarmaceutica> results2 = new ArrayList<FormaFarmaceutica>();
-        
 
         List<FfFarmaco> listaff = ffFarmacoFacade.findFarmacoId(farmaco.get(0));
-        
-        //System.out.println("fff: "+listaff);
 
+        //System.out.println("fff: "+listaff);
         for (int i = 0; i < listaff.size(); i++) {
             FormaFarmaceutica listaFormFarm = listaff.get(i).getFormafarmaceuticaid();
             results2.add(listaFormFarm);
@@ -123,16 +130,17 @@ public class funcionQl {
         this.aa = results2;
     }
 
+    
+
     public void mostrarDosis() {
         System.out.println("getff: " + getFf());
         System.out.println("ff: " + ff);
         List<FormaFarmaceutica> formaFarmaceutica = formaFarmaceuticaFacade.findNombreFF(ff);
-       
+
         //System.out.println(farmaco.getNombrefarmaco());
         List<String> results = new ArrayList<String>();
 
         List<DosisFf> listaDosis = dosisFfFacade.findDosisId(formaFarmaceutica.get(0));
-       
 
         for (int i = 0; i < listaDosis.size(); i++) {
             Dosis listadosis = listaDosis.get(i).getDosisid();
@@ -145,31 +153,82 @@ public class funcionQl {
 
     }
 
-   
-/* EL "BUSCA" NO SE OBTIENE POR EL MOMENTO*/
-    public void validarBotonGuardar() {
-        System.out.println("----------->Entre a GUARDAR");
-        
+    /* EL "BUSCA" NO SE OBTIENE POR EL MOMENTO*/
+    public void guardarRecetaInterna() {
+ 
         FacesContext context = FacesContext.getCurrentInstance();
-        /*boolean hayrut;
-        try{
-        if (busca.equals("") || busca == null) {
-            hayrut=false;
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "ERROR", "Debe ingresar un RUN obligatoriamente"));
-        } else {
-            hayrut = true;
+        boolean hayrut;
+        System.out.println("------->RUT:"+session.getRutPaciente());
+        try {
+            if (session.getRutPaciente().equals("") || session.getRutPaciente() == null) {
+                System.out.println("Entre al rut null");
+                hayrut = false;
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "ERROR", "Debe ingresar un RUN obligatoriamente"));
+            } else {
+                System.out.println("Hay rut");
+                hayrut = true;
+            }
+        } catch (NullPointerException e) {
+            
+            hayrut = false;
+            System.out.println("Entre al catch");
+            //session.setRutPaciente("");
         }
-        }catch(NullPointerException e){
-            hayrut=false;
-        }
-        System.out.println("hayrut:"+hayrut);
-        System.out.println("validacion:"+validacion);
+        System.out.println("hayrut:" + hayrut);
+        System.out.println("validacion:" + validacion);
         if (hayrut && validacion == 1) {
             System.out.println("Guardar");
+            Prescription receta = new Prescription();
+            List<Prescription> recetas = new ArrayList<Prescription>();
+            Professionals doctor = new Professionals();
+            Clinicalrecords clin = new Clinicalrecords();
+            RecetaExterna recetaInterna = new RecetaExterna();
+            List<Farmaco> remedios = new ArrayList<Farmaco>();
+            Farmaco remedio = new Farmaco();
+            FormaFarmaceutica forma = new FormaFarmaceutica();
+            List<FormaFarmaceutica> formas = new ArrayList<FormaFarmaceutica>();
+            Dosis laDosis = new Dosis();
+            clin = clinicalrecordsFacade.find(session.getFicha());
+            doctor = professionalsFacade.find(session.getRut());
+            System.out.println(session.getFicha());
+            receta.setDescription("descripcion3");
+            receta.setRut(doctor);
+            receta.setCrecid(clin);
+            java.util.Date fechaActual = new java.util.Date();//fecha actual
+            receta.setPrescriptionDay(fechaActual);
+            prescriptionFacade.create(receta);
+            recetas = prescriptionFacade.findAll();
+            System.out.println("-----------> GUARDAR receta");
+            //guarda en receta interna
+            receta = recetas.get(recetas.size() - 1);//toma el ultimo valor guardado
+            System.out.println("recetaaaaaaa=" + receta.getPrescriptionid());
+            recetaInterna.setCrecid(session.getFicha());
+            recetaInterna.setPrescriptionid(receta.getPrescriptionid());
+            recetaInterna.setDescription("description");
+            recetaInterna.setPrescriptionDay(fechaActual);
+            recetaInterna.setPeriodoDeTraamiento(Integer.parseInt(recetaa.get(0).getPeriodo()));
+            recetaExternaFacade.create(recetaInterna);
+            System.out.println("-----------> GUARDAR receta externa");
+            //guarda en recetaexternafarmaco
+            RexternaFarmaco rexF = new RexternaFarmaco();
+            for (int i = 0; i < recetaa.size(); i++) {
+                remedios = farmacoFacade.findNombre(recetaa.get(i).getNombre());
+                remedio = remedios.get(0);
+                formas = formaFarmaceuticaFacade.findNombreFF(recetaa.get(i).getForma());
+                forma = formas.get(0);
+                laDosis = dosisFacade.find(1);
+                rexF.setCantidaddespacho(Integer.parseInt(recetaa.get(i).getUnidades()));
+                rexF.setFarmacoid(remedio);
+                rexF.setFormafarmaceuticaid(forma);
+                rexF.setDosisid(laDosis);
+                rexF.setPrescriptionid(recetaInterna);
+                rexternaFarmacoFacade.create(rexF);
+                System.out.println("-----------> GUARDAR receta farmaco");
+            }
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Datos Guardados"));
         } else {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "ERROR", "Para Guardar debe ingresar todos los campos solicitados"));
-        }*/
+        }
 
     }
 
@@ -195,7 +254,6 @@ public class funcionQl {
                     this.dosis.clear();
                     this.periodo = "";
                     this.unidades = "";
-                    
 
                 } else {
                     context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "ERROR", "Periodo y unidades exigen números mayores ó igual a 1"));
@@ -217,22 +275,6 @@ public class funcionQl {
                 recetaa.remove(i);
             }
         }
-    }
-
-    public void guardarReceta() {
-        Prescription receta = new Prescription();
-        Professionals doctor = new Professionals();
-        Clinicalrecords clin = new Clinicalrecords();
-        clin = clinicalrecordsFacade.find(1);
-        doctor = professionalsFacade.find("19");
-        receta.setDescription("description");
-        receta.setRut(doctor);
-        receta.setCrecid(clin);
-        Calendar fecha2 = new GregorianCalendar();
-        fecha2.setWeekDate(1, 2, 1);
-
-        prescriptionFacade.create(receta);
-
     }
 
     public void comparar() {
@@ -362,6 +404,14 @@ public class funcionQl {
 
     public void setBusca(String busca) {
         this.busca = busca;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
 }

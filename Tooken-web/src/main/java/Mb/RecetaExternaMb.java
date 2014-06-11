@@ -7,8 +7,10 @@ package Mb;
 
 import entity.Clinicalrecords;
 import entity.Patients;
+import entity.Prescription;
 import entity.Prevision;
 import entity.Professionals;
+import entity.RecetaInterna;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -33,6 +35,8 @@ import session.PatientsFacadeLocal;
 import session.PrevisionFacadeLocal;
 import session.ProfessionalsFacadeLocal;
 import org.primefaces.event.CloseEvent;
+import session.PrescriptionFacadeLocal;
+import session.RecetaInternaFacadeLocal;
 
 /**
  *
@@ -42,7 +46,13 @@ import org.primefaces.event.CloseEvent;
 @RequestScoped
 
 public class RecetaExternaMb {
-    
+
+    @EJB
+    private RecetaInternaFacadeLocal recetaInternaFacade;
+
+    @EJB
+    private PrescriptionFacadeLocal prescriptionFacade;
+
     @Inject
     LoginSessionMB session;
     @EJB
@@ -50,7 +60,7 @@ public class RecetaExternaMb {
     @EJB
     private FfFarmacoFacadeLocal ffFarmacoFacade;
     @EJB
-    private FarmacoFacadeLocal farmacoFacade;   
+    private FarmacoFacadeLocal farmacoFacade;
     @EJB
     private PrevisionFacadeLocal previsionFacade;
     @EJB
@@ -59,8 +69,6 @@ public class RecetaExternaMb {
     private PatientsFacadeLocal patientsFacade;
     @EJB
     private ProfessionalsFacadeLocal professionalsFacade;
-
-
 
     int ano;
     int mes;
@@ -72,7 +80,7 @@ public class RecetaExternaMb {
     String runPac;
     String edad;
     String ficha;
-    String text;
+    String text = " ";
     String busca;
     String fecha;
     String txt;
@@ -87,10 +95,9 @@ public class RecetaExternaMb {
     String prevision;
     String fechaNac;
 
- 
-   public RecetaExternaMb(){
-       
-   }
+    public RecetaExternaMb() {
+
+    }
 
     public String getFechaNac() {
         return fechaNac;
@@ -99,8 +106,7 @@ public class RecetaExternaMb {
     public void setFechaNac(String fechaNac) {
         this.fechaNac = fechaNac;
     }
-    
-   
+
     public String getPrevision() {
         return prevision;
     }
@@ -108,8 +114,7 @@ public class RecetaExternaMb {
     public void setPrevision(String prevision) {
         this.prevision = prevision;
     }
-   
-    
+
     public String getVerificar() {
         return verificar;
     }
@@ -117,7 +122,6 @@ public class RecetaExternaMb {
     public void setVerificar(String verificar) {
         this.verificar = verificar;
     }
-    
 
     public String getUserPrint() {
         return userPrint;
@@ -361,14 +365,13 @@ public class RecetaExternaMb {
     public void setApellido(String apellido) {
         this.apellido = apellido;
     }
-    
 
     public void validacion2() throws IOException {
         System.out.println("entré :DDDDDDDDDDD");
 
         String usuario = Login.user;
         String pass = Login.contrasena;
-        System.out.println(usuario +" "+pass);
+        System.out.println(usuario + " " + pass);
         FacesContext context = FacesContext.getCurrentInstance();
 
         Professionals prof = professionalsFacade.find(usuario);
@@ -389,23 +392,20 @@ public class RecetaExternaMb {
         }
 
     }
-    
-    
-    public void comparar(){
-        System.out.println("entre a comparar"+ session.getRut()+" "+ session.getContrasena());
-        
-        if(session.getRut().equals(userPrint) && session.getContrasena().equals(passPrint)){
-        verificar="Si";
-        
-        
-        }else{
+
+    public void comparar() {
+        System.out.println("entre a comparar" + session.getRut() + " " + session.getContrasena());
+
+        if (session.getRut().equals(userPrint) && session.getContrasena().equals(passPrint)) {
+            verificar = "Si";
+
+        } else {
             FacesContext context = FacesContext.getCurrentInstance();
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Usuario Invalido", "Verificar usuario o contraseña"));
-                verificar="No";
-                
-                }
-    
-    
+            verificar = "No";
+
+        }
+
     }
 
     public void validacion() throws IOException {
@@ -424,10 +424,6 @@ public class RecetaExternaMb {
         //else{
         //context.addMessage(null, new FacesMessage("Usuario Invalido", "asd" ));
         //}
-    }
-
-    public void truco() {
-        System.out.println(text);
     }
 
     public void mostrarDomicilio() {
@@ -453,12 +449,12 @@ public class RecetaExternaMb {
         Patients persona = patientsFacade.find(rut);
         System.out.println("direccion: " + persona.getDateOfBirth().toString());
         String datoPersona = persona.getDateOfBirth();
-        String [] lista = datoPersona.split("/");
-        edad = (getAno() - Integer.parseInt(lista[2]))+"";
-        
+        String[] lista = datoPersona.split("-");
+        edad = (getAno() - Integer.parseInt(lista[2])) + "";
+
     }
-    
-    public void mostrarFechaNac(){
+
+    public void mostrarFechaNac() {
         String rut = getBusca();
         Patients persona = patientsFacade.find(rut);
         System.out.println("direccion: " + persona.getDateOfBirth().toString());
@@ -479,7 +475,7 @@ public class RecetaExternaMb {
 
         Calendar fecha2 = new GregorianCalendar();
 
-        this.fecha = fecha2.get(Calendar.DAY_OF_MONTH) + "/" + (fecha2.get(Calendar.MONTH)+1) + "/" + fecha2.get(Calendar.YEAR);
+        this.fecha = fecha2.get(Calendar.DAY_OF_MONTH) + "/" + (fecha2.get(Calendar.MONTH) + 1) + "/" + fecha2.get(Calendar.YEAR);
     }
 
     public void mostrarFicha() {
@@ -515,6 +511,8 @@ public class RecetaExternaMb {
                 mostrarNombre();
                 mostrarFicha();
                 mostrarPrevision();
+                session.setFicha(Integer.parseInt(ficha));
+                session.setRutPaciente(busca);
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Datos obtenidos"));
             } catch (NullPointerException e) {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "ERROR", "RUN no encontrado"));
@@ -562,23 +560,68 @@ public class RecetaExternaMb {
         context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "ERROR", "RUN no encontrado"));
     }
 
-    public void mostrarPrevision(){
+    public void mostrarPrevision() {
         String rut = getBusca();
-        List<Patients> lista = patientsFacade.findAll(); 
-        Patients pasiente=new Patients();
+        List<Patients> lista = patientsFacade.findAll();
+        Patients pasiente = new Patients();
         Prevision prev = new Prevision();
         for (int i = 0; i < lista.size(); i++) {
-            if(rut.equals(lista.get(i).getRut())){
+            if (rut.equals(lista.get(i).getRut())) {
                 pasiente = lista.get(i);
                 prev = pasiente.getPrevisionid();
-}
+            }
         }
       //  List<Prevision> listaPrevision= previsionFacade.findID(pasiente);
-     
-        this.prevision=prev.getType();
-       
-        
-      
+
+        this.prevision = prev.getType();
+
+    }
+
+    public void guardarRecetaExterna() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        boolean hayrut;
+        try {
+            String rut=session.getRutPaciente();
+            System.out.println("------> RUUUUUUT:"+rut);
+            if (rut.equals("") || rut == null) {
+                hayrut = false;
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "ERROR", "Debe ingresar un RUN obligatoriamente"));
+            } else {
+                hayrut = true;
+                Prescription receta = new Prescription();
+                List<Prescription> recetas = new ArrayList<Prescription>();
+                Professionals doctor = new Professionals();
+                Clinicalrecords clin = new Clinicalrecords();
+                RecetaInterna recetaExterna = new RecetaInterna();
+                clin = clinicalrecordsFacade.find(session.getFicha());
+                doctor = professionalsFacade.find(session.getRut());
+                receta.setDescription(text);
+                receta.setRut(doctor);
+                receta.setCrecid(clin);
+                java.util.Date fechaActual = new java.util.Date();//fecha actual
+                receta.setPrescriptionDay(fechaActual);
+                prescriptionFacade.create(receta);
+                recetas = prescriptionFacade.findAll();
+                System.out.println("-----------> GUARDAR receta");
+                //guarda en receta interna
+                receta = recetas.get(recetas.size() - 1);//toma el ultimo valor guardado
+                System.out.println("recetaaaaaaa=" + receta.getPrescriptionid());
+                recetaExterna.setCrecid(session.getFicha());
+                recetaExterna.setPrescriptionid(receta.getPrescriptionid());
+                recetaExterna.setDescription(text);
+                recetaExterna.setPrescriptionDay(fechaActual);
+                recetaInternaFacade.create(recetaExterna);
+                session.setRutPaciente("");
+                System.out.println("-----------> GUARDAR receta externa");
+                session.setRutPaciente("");
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Datos Guardados"));
+            }
+        } catch (NullPointerException e) {
+            hayrut = false;
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "ERROR", "Ingrese RUN válido para guardar cambios"));
+        }
+        System.out.println("hayrut:" + hayrut);
+
     }
 
 }

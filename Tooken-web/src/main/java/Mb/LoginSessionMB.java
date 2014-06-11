@@ -35,11 +35,22 @@ public class LoginSessionMB implements Serializable {
     @Inject
     LoginMB login;
     
-    private String rut, nombre, contrasena,apellido;     
+    private String rut, nombre, contrasena,apellido,rutPaciente;
+    private int ficha;
     
     public LoginSessionMB() {
     }
 
+    public int getFicha() {
+        return ficha;
+    }
+
+    public void setFicha(int ficha) {
+        this.ficha = ficha;
+    }
+
+    
+    
     public String getRut() {
         return rut;
     }
@@ -113,5 +124,13 @@ public class LoginSessionMB implements Serializable {
         this.error = error;
     }
 
+    public String getRutPaciente() {
+        return rutPaciente;
+    }
+
+    public void setRutPaciente(String rutPaciente) {
+        this.rutPaciente = rutPaciente;
+    }
+   
     
 }

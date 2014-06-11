@@ -62,8 +62,6 @@
                     <p:submenu label="Exámenes" icon="ui-icon-document-b">
                         <p:menuitem value="Laboratorio" url="../views/ExLaboratorio.xhtml" icon="" />
                         <p:menuitem value="TNS" url="../views/ExTns.xhtml" icon="" />
-                        <p:menuitem value="ELISA" url="../views/ExElisa.xhtml" icon="" />
-                        <p:menuitem value="Radiológico" url="../views/ExRadiologico.xhtml" icon="" />
 
                     </p:submenu>
                     <p:submenu label="Generar alta" icon="ui-icon-document-b">
@@ -97,46 +95,31 @@
                             <h3 style="font-weight: bold" align="center">SOLICITUD EXAMEN RADIOLOGICO</h3>
                             <h4 align="center">Laboratorio Centralizado CDT CABL</h4>
                             <h4 align="center">Servicio de Salud Metropolitano Sur</h4>
-                            <p:panel id="buscador" styleClass="noPrintBlock">
-                                <p:growl id="messages" showDetail="true" life="800"/>
-                                <div  align="center">
-                                    <h:panelGrid columns="3" cellpadding="5">
-
-                                        <h:outputLabel  value="R.U.N paciente: "/>
-                                        <p:autoComplete  id="acSimple" value="#{recetaexternaMb.busca}"
-                                                         completeMethod="#{recetaexternaMb.complete}" size="35" placeholder="Ingrese RUN...">
-
-                                        </p:autoComplete>
-
-                                        <p:commandButton action="#{recetaexternaMb.botonAct()}" update="panelGeneral,messages" id="iconSearch"  icon="ui-icon-search" title="Icon Search" />
-                                    </h:panelGrid>
-                                </div>
-                            </p:panel>
                             <p:panel>
                                 <br/>
                                 <p:panelGrid id="panelGeneral" columns="4" style="width: 100%;text-align: center">
                                     <f:facet name="header">Datos Paciente</f:facet>
 
                                     <h:outputLabel  value="Nombre: "/>
-                                    <p:outputLabel value="#{recetaexternaMb.nombre}"/>
+                                    <p:outputLabel value="#{pacienteMb.nombrePac}"/>
 
                                     <h:outputLabel  value="R.U.N: "/>
-                                    <p:outputLabel  id="run" value="#{recetaexternaMb.txt}"/>
+                                    <p:outputLabel  id="run" value="#{pacienteMb.txt}"/>
 
                                     <h:outputLabel  value="Edad: "/>
-                                    <p:outputLabel id="edad" value="#{recetaexternaMb.edad}"/>
+                                    <p:outputLabel id="edad" value="#{pacienteMb.edad}"/>
 
                                     <h:outputLabel  value="Cama: "/>
-                                    <p:outputLabel id="cama" value="#"/>
+                                    <p:outputLabel id="cama" value=""/>
 
                                     <h:outputLabel  value="Sala: "/>
-                                    <p:outputLabel id="sala" value="#"/>
+                                    <p:outputLabel id="sala" value=""/>
 
                                     <h:outputLabel  value="Fecha: "/>
-                                    <p:outputLabel id="fecha" value="#{recetaexternaMb.fecha}"/>
+                                    <p:outputLabel id="fecha" value="#{pacienteMb.fecha}"/>
 
                                     <h:outputLabel  value="Diagnóstico y sintomas principales: "/>
-                                    <p:outputLabel id="diag" value="#"/>
+                                    <p:outputLabel id="diag" value=""/>
 
                                     <h:outputLabel  value="Nombre Médico: "/>
                                     <p:outputLabel  value="#{loginSessionMB.nombre} #{loginSessionMB.apellido}" />
@@ -144,46 +127,123 @@
                                 </p:panelGrid>
                             </p:panel>
                             <h:outputLabel  value="Examen Solicitado: "/>
-                            <p:inputText id="exam" value="#{check.examenS}" />
+                            <p:selectManyCheckbox  value="#{check.selectedExam}" layout="grid" columns="3">
+                                <f:selectItems value="#{check.exam}" var="exam" itemLabel="#{exam}" itemValue="#{exam}" />
+                            </p:selectManyCheckbox>
                             <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
                                 <p:outputLabel value="Exámenes radiológicos anteriores practicados en el servicio:" />
                                 <p:selectOneRadio id="yesno" value="#{check.select}">
                                     <f:selectItem itemLabel="SI" itemValue="SI" value="#{check.select}" />
                                     <f:selectItem itemLabel="NO" itemValue="NO" value="#{check.select}" />
                                 </p:selectOneRadio>
-                                <p:outputLabel value="N°:"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="N°: "/>
                                 <p:inputText value="#{check.numero}" />
+                                <p:outputLabel for="datetime" value="Fecha y Hora: " />
+                                <p:calendar id="datetime" value="#{check.date9}" pattern="dd/MM/yyyy HH:mm" timeZone="TimeZone.getChile()"/>
+
                             </h:panelGrid>
 
-                            <p:outputLabel for="datetime" value="Fecha:" />
-                            <p:calendar id="datetime" value="#{check.date9}" pattern="dd/MM/yyyy HH:mm" timeZone="TimeZone.getChile()"/>
+                            <h:panelGrid columns="1">
+                                <br/>
+                                <p:outputLabel value="Exámen efectuado por:____________________________________________"/>
+                                <br/>
+                                <p:outputLabel value="Exámen ensobrado por:___________________________________________"/>
+                                <br/>
+                                <p:outputLabel value="Exámen pendiente por:____________________________________________"/>
 
-
+                            </h:panelGrid>
                             <p:panel>
-                                <p:panelGrid columns="2">
-                                    <p:outputLabel value="Exámen efectuado por:__________________________________"/>
-                                </p:panelGrid>
-                            </p:panel>
-                            <p:commandButton value="Submit" update="display" icon="ui-icon-check" oncomplete="PF('dlg').show()"/>
+                                <p:dataTable var="table" value="tabla" >
+                                    <p:column headerText="13x18"  >
+                                        <h:inputTextarea style="visibility: collapse;width: 20px"/>
+                                    </p:column>
 
-                            <p:dialog modal="true" resizable="false" widgetVar="dlg" header="Values" showEffect="clip">
-                                <p:panelGrid columns="2" id="display" columnClasses="label,value">
-                                    <h:outputText value="Seleccion:" />
-                                    <h:outputText value="#{check.select}" />
-                                    <h:outputText value="N°:" />
-                                    <h:outputText value="#{check.numero}"/>
-                                    <h:outputText value="Examen solicitado:" />
-                                    <h:outputText value="#{check.examenS}"/>
-                                    <h:outputText value="Datetime:" />
-                                    <h:outputText value="#{check.date9}">
-                                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
-                                    </h:outputText>
-                                </p:panelGrid> 
+                                    <p:column headerText="18x24">
+                                        <h:outputText value="&nbsp; " />
+                                    </p:column>
+
+                                    <p:column headerText="20x30">
+                                        <h:outputText value="&nbsp; " />
+                                    </p:column>
+
+                                    <p:column headerText="30x40">
+                                        <h:outputText value="&nbsp; " />
+                                    </p:column>
+
+                                    <p:column headerText="35x35">
+                                        <h:outputText value="&nbsp; " />
+                                    </p:column>
+
+                                    <p:column headerText="ABREU">
+                                        <h:outputText value="&nbsp; " />
+                                    </p:column>
+                                </p:dataTable>
+                            </p:panel>
+                            <p style="font-weight: bold">NOTA: Adjunte esta papeleta las radiografías que están en el Servicio</p>
+
+                            <div align="center">
+                                <p:commandButton value="Guardar" update="display" oncomplete="PF('dlg').show()" icon="ui-icon-check"/>
+                                 </div>
+                            <p:dialog header="Values" modal="true" showEffect="clip" widgetVar="dlg" height="500" maximizable="true" resizable="false" closeOnEscape="true" draggable="false"  >
+                                <div align="center">
+                                    <p:commandButton update="display" value="Imprimir" type="button" icon="ui-icon-print" style="display:block;margin-bottom: 20px">
+                                        <p:printer target="display" />
+                                    </p:commandButton>
+                                </div>
+                                <h3 style="font-weight: bold" align="center">SOLICITUD EXAMEN RADIOLOGICO</h3>
+                                <h4 align="center">Laboratorio Centralizado CDT CABL</h4>
+                                <h4 align="center">Servicio de Salud Metropolitano Sur</h4>
+                                <p:panel id="display">
+                                    <p:panelGrid columns="4" style="width: 100%;text-align: center">
+                                        <f:facet name="header">Datos Paciente</f:facet>
+
+                                        <h:outputLabel  value="Nombre: "/>
+                                        <p:outputLabel value="#{pacienteMb.nombrePac}"/>
+
+                                        <h:outputLabel  value="R.U.N: "/>
+                                        <p:outputLabel  id="run2" value="#{pacienteMb.txt}"/>
+
+                                        <h:outputLabel  value="Edad: "/>
+                                        <p:outputLabel id="edad2" value="#{pacienteMb.edad}"/>
+
+                                        <h:outputLabel  value="Cama: "/>
+                                        <p:outputLabel id="cama2" value=""/>
+
+                                        <h:outputLabel  value="Sala: "/>
+                                        <p:outputLabel id="sala2" value=""/>
+
+                                        <h:outputLabel  value="Fecha: "/>
+                                        <p:outputLabel id="fecha2" value="#{pacienteMb.fecha}"/>
+
+                                        <h:outputLabel  value="Diagnóstico y sintomas principales: "/>
+                                        <p:outputLabel id="diag2" value=""/>
+
+                                        <h:outputLabel  value="Nombre Médico: "/>
+                                        <p:outputLabel  value="#{loginSessionMB.nombre} #{loginSessionMB.apellido}" />
+
+                                    </p:panelGrid>
+                                    <p:panelGrid columns="2" columnClasses="label,value">
+                                        <h:outputText value="Exámenes radiológicos anteriores practicados en el servicio:" />
+                                        <h:outputText value="#{check.select}" />
+                                        <h:outputText value="N°:" />
+                                        <h:outputText value="#{check.numero}"/>
+                                        <h:outputText value="Examen solicitado:" />
+                                        <p:dataList value="#{check.selectedExam}" var="exam">
+                                            #{exam}
+                                        </p:dataList>
+                                        <h:outputText value="Fecha y hora:" />
+                                        <h:outputText value="#{check.date9}">
+                                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                        </h:outputText>
+
+                                    </p:panelGrid>
+
+                                </p:panel>
+
                             </p:dialog>
                         </p:panel>
-                        <div align="center">
-                            <p:commandButton action="#{funcionQl.validarBotonGuardar()}" update="message"  value="Guardar" icon="ui-icon-check"/>
-                        </div>
                     </h:form>
                 </div>
             </div>
